@@ -7,16 +7,29 @@
 
 <script>
 import AppNav from "./components/AppNav";
+const auth = require('solid-auth-client')
+
 export default {
-  components: { AppNav }
-};
+  components: { 
+		AppNav 
+	},
+	created(){
+		auth.trackSession(session => {
+			if(!session){
+				this.$store.dispatch('logout')
+			}else{
+				this.$store.dispatch('login')
+			}
+		})
+	}
+}
 </script>
 
 <style>
 html,
 body {
   height: 100%;
-  margin: 1px;
+  margin: 0px;
 }
 #app {
   font-family: "Lato", sans-serif;

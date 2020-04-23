@@ -6,15 +6,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 const auth = require('solid-auth-client')
 
 export default {
-	data() {
-		return {
-			loggedIn: false,
-			popupUri : 'https://solid.github.io/solid-auth-client/dist/popup.html'
-		}
-	},	
+	computed: mapState({
+		//loggedIn: state => state.loggedIn 
+		loggedIn: 'loggedIn',
+		popupUri: 'popupUri'
+	}),
 	methods: {
 		login: function() {
 			let popupUri = this.popupUri
@@ -23,20 +23,6 @@ export default {
 		logout: function() {
 			auth.logout()
 		}
-	},
-	created(){
-		let vm = this
-		auth.trackSession(session => {
-			if(!session){
-				console.log('not logged in')	
-				vm.loggedIn = false
-				vm.webId = ""
-			}else{
-				console.log('logged in ')	
-				vm.loggedIn = true
-				vm.webId = session.webId
-			}
-		})
 	}
 }
 </script>
