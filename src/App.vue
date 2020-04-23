@@ -18,7 +18,7 @@ export default {
 			if(!session){
 				this.$store.dispatch('logout')
 			}else{
-				this.$store.dispatch('login')
+				this.$store.dispatch('login', session.webId)
 			}
 		})
 	}

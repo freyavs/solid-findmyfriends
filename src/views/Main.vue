@@ -2,16 +2,26 @@
   <div class="site">
     <div class="map"></div>
     <div class="friendslist"></div>
-    <div class="me"></div>
+    <Me class="me"></Me>
   </div>
 </template>
+
+<script>
+import Me from '@/components/Me.vue'
+
+export default {
+	components: {
+		Me
+	}
+}
+</script>
 
 <style scoped>
 div {
   border-radius: 8px;
 }
 .site {
-  height: 100%;
+  height: 95%;
   display: grid;
   grid-gap: 3px;
 

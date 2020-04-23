@@ -13,7 +13,8 @@ export default {
 	computed: mapState({
 		//loggedIn: state => state.loggedIn 
 		loggedIn: 'loggedIn',
-		popupUri: 'popupUri'
+		popupUri: 'popupUri',
+		webId: 'webId'
 	}),
 	methods: {
 		login: function() {

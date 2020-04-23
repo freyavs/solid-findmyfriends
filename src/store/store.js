@@ -6,21 +6,23 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
 		loggedIn: false,
-		popupUri : 'https://solid.github.io/solid-auth-client/dist/popup.html'
+		popupUri : 'https://solid.github.io/solid-auth-client/dist/popup.html',
+		webId: '',
+		name: "thor"
   },
   mutations: {
-		LOGIN(state){
-			console.log('login')
+		LOGIN(state, webId){
 			state.loggedIn = true
+			state.webId = webId
 		},
 		LOGOUT(state){
-			console.log('logout')
 			state.loggedIn = false
+			state.webId = ''
 		}
   },
   actions: {
-		login({ commit }){
-			commit('LOGIN')
+		login({ commit }, webId){
+			commit('LOGIN', webId)
 		},
 		logout({ commit }){
 			commit('LOGOUT')
