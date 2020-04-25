@@ -1,6 +1,6 @@
 <template>
   <div class="site">
-    <div class="map"></div>
+    <Map class="map"></Map>
     <Friend class="friendslist"></Friend>
     <Me class="me"></Me>
   </div>
@@ -9,10 +9,11 @@
 <script>
 import Me from '@/components/Me.vue'
 import Friend from '@/components/Friend.vue'
+import Map from '@/components/Map.vue'
 
 export default {
 	components: {
-		Me, Friend	
+		Me, Friend, Map	
 	}
 }
 </script>

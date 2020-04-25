@@ -1,7 +1,6 @@
 <template>
   <div v-if="loggedIn">
     <h3 v-if="loggedIn">{{ name }}</h3>
-    <BaseToggleButton/>
   </div>
 </template>
 
