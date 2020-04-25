@@ -17,6 +17,7 @@ export default new Vuex.Store({
     name: "",
     store: store,
     fetcher: fetcher,
+    friends: []
   },
   mutations: {
     LOGIN(state, webId) {
@@ -26,26 +27,44 @@ export default new Vuex.Store({
     LOGOUT(state) {
       state.loggedIn = false;
       state.webId = "";
+      state.friends = []
     },
     SET_NAME(state, name) {
       state.name = name;
     },
+    ADD_FRIEND(state, friend){
+      state.friends.push(friend) 
+    }
   },
   actions: {
     login({ commit, dispatch }, webId) {
       commit("LOGIN", webId)
-			dispatch('resolveName')
+      //dispatch('resolveName')
+      dispatch('resolveFriends')
     },
     logout({ commit }) {
       commit("LOGOUT");
     },
 		resolveName({ commit, state }){
       const person = state.webId;
-      state.store.fetcher.load(person).then(() => {
+      state.fetcher.load(person).then(() => {
         const fullName = state.store.any($rdf.sym(person), FOAF("name"));
         commit("SET_NAME", fullName.value);
       });
-		}
+    },
+    resolveFriends({commit, state}){
+      console.log("fetching friends")
+      const person = "https://ruben.verborgh.org/profile/#me";
+      const friends = state.store.each($rdf.sym(person), FOAF("knows"));
+      console.log(friends)
+      friends.forEach( (friend) => {
+        console.log(friend)
+        state.fetcher.load(friend).then(() => {
+          const fullName = state.store.any(friend, FOAF('name'))
+          commit("ADD_FRIEND", fullName.value)
+        })
+      })
+    }
   },
   modules: {},
 });

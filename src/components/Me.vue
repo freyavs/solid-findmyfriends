@@ -8,10 +8,7 @@
 import { mapState } from "vuex";
 
 export default {
-  computed: mapState({
-    name: "name",
-    loggedIn: "loggedIn",
-  })
+  computed: mapState(["name", "loggedIn"])
 };
 </script>
 

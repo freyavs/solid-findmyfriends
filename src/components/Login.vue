@@ -10,12 +10,7 @@ import { mapState } from 'vuex'
 const auth = require('solid-auth-client')
 
 export default {
-	computed: mapState({
-		//loggedIn: state => state.loggedIn 
-		loggedIn: 'loggedIn',
-		popupUri: 'popupUri',
-		webId: 'webId'
-	}),
+	computed:  mapState(['loggedIn','popupUri','webId']),
 	methods: {
 		login: function() {
 			let popupUri = this.popupUri
