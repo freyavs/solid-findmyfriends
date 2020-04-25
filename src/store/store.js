@@ -52,41 +52,39 @@ export default new Vuex.Store({
 		}
   },
   actions: {
-    login({ commit, dispatch }, webId) {
+		login({ commit, dispatch }, webId) {
       commit("LOGIN", webId)
-      dispatch('resolveName')
-      dispatch('resolveFriends')
+			dispatch('fetchStore')
+				.then( () => {
+					dispatch('resolveName')
+					dispatch('resolveFriends')
+				})
     },
     logout({ commit }) {
       commit("LOGOUT");
     },
-    locationSharingOn({commit}) {
-      commit("LOCATION_ON")
-    },
-    locationSharingOff({commit}) {
-      commit("LOCATION_OFF")
-    },
 		fetchStore({ state }){
 			return state.fetcher.load(state.webId)
-    },
+		},
 		resolveName({ commit, state }){
-      const person = state.webId;
-      state.fetcher.load(person).then(() => {
-        const fullName = state.store.any($rdf.sym(person), FOAF("name"));
-        commit("SET_NAME", fullName.value);
-      });
+      const fullName = state.store.any($rdf.sym(state.webId), FOAF("name"));
+      commit("SET_NAME", fullName.value);
     },
     resolveFriends({commit, state}){
-      console.log("fetching friends")
-      const person = "https://ruben.verborgh.org/profile/#me";
+      const person = state.webId;
       const friends = state.store.each($rdf.sym(person), FOAF("knows"));
-      console.log(friends)
       friends.forEach( (friend) => {
 				state.fetcher.load(friend).then(() => {
           commit("ADD_FRIEND", friend)
 					commit("ADD_FRIEND_NAME", state.store.any(friend, FOAF('name')).value)
         })
       })
+    },
+    locationSharingOn({commit}) {
+      commit("LOCATION_ON")
+    },
+    locationSharingOff({commit}) {
+      commit("LOCATION_OFF")
     },
     fetchLocation({commit}){
       if(!("geolocation" in navigator)) {
