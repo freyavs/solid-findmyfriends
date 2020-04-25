@@ -51,11 +51,11 @@ div {
 }
 @media screen and (min-width: 950px) {
   .site {
-    grid-template-rows: 10fr 1fr;
+    grid-template-rows: 1fr 10fr;
     grid-template-columns: 2fr 5fr;
     grid-template-areas:
-      "friends map"
-      "me map";
+      "me map"
+      "friends map";
   }
 }
 </style>
