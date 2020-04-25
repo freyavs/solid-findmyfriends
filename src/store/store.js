@@ -12,6 +12,7 @@ const fetcher = new $rdf.Fetcher(store);
 export default new Vuex.Store({
   state: {
     loggedIn: false,
+    sharingLocation: false,
     popupUri: "https://solid.github.io/solid-auth-client/dist/popup.html",
     webId: "",
     name: "",
