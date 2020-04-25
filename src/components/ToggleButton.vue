@@ -9,7 +9,9 @@
 import { mapState } from "vuex";
 
 export default {
-    computed: mapState(['sharingLocation']),
+    computed: mapState({
+			sharingLocation: state => state.location.sharingLocation
+		}),
     methods: {
         changeLocationSharing(){
             if (!this.sharingLocation){

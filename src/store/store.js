@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import * as location from '@/store/modules/location.js'
 
 Vue.use(Vuex);
 
@@ -31,16 +32,6 @@ export default new Vuex.Store({
       state.loggedIn = false;
       state.webId = "";
       state.friends = []
-    },
-    LOCATION_ON(state) {
-      state.sharingLocation = true
-    },
-    LOCATION_OFF(state) {
-      state.sharingLocation = false
-			state.currentLocation = null
-    },
-    SET_LOCATION(state,location){
-      state.currentLocation = location
     },
     SET_NAME(state, name) {
       state.name = name
@@ -80,25 +71,9 @@ export default new Vuex.Store({
 					commit("ADD_FRIEND_NAME", state.store.any(friend, FOAF('name')).value)
         })
       })
-    },
-    locationSharingOn({commit}) {
-      commit("LOCATION_ON")
-    },
-    locationSharingOff({commit}) {
-      commit("LOCATION_OFF")
-    },
-    fetchLocation({commit}){
-      if(!("geolocation" in navigator)) {
-        console.log("Geolocation is not available")
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(pos => {
-        commit('SET_LOCATION', pos)
-      }, err => {
-        console.log(err.message)
-      })
     }
   },
-  modules: {},
+  modules: {
+		location
+	},
 });

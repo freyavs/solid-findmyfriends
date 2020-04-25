@@ -10,7 +10,9 @@ import L from "leaflet";
 import { mapState } from "vuex";
 
 export default {
-  computed: mapState(["currentLocation"]),
+  computed: mapState({
+		currentLocation: state => state.location.currentLocation
+	}),
   data() {
     return {
       map: null,
@@ -19,6 +21,7 @@ export default {
   },
   watch: {
     currentLocation: function() {
+		console.log(this.currentLocation)
       if (this.currentLocation != null) {
         let smallIcon = new L.Icon({
           iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png",
