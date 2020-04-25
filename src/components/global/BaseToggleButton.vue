@@ -1,7 +1,7 @@
 <template>
     <div>
         <button v-if="sharingLocation" v-on:click="">start tracking</button>
-        <button v-else v-on:click="">stop tracking</button>
+        <button v-else v-on:click="log">stop tracking</button>
     </div>
 </template>
 
@@ -9,7 +9,12 @@
 import { mapState } from "vuex";
 
 export default {
-computed: mapState(["sharingLocation"])
+computed: mapState(["sharingLocation"]),
+methods: {
+	log() {
+		console.log('stop track')
+		}
+	}
 };
 </script>
 
