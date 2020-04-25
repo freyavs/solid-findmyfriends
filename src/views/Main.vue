@@ -1,18 +1,17 @@
 <template>
   <div class="site">
     <div class="map"></div>
-    <Friend class="friendslist"></Friend>
+    <div class="friendslist"></div>
     <Me class="me"></Me>
   </div>
 </template>
 
 <script>
 import Me from '@/components/Me.vue'
-import Friend from '@/components/Friend.vue'
 
 export default {
 	components: {
-		Me, Friend	
+		Me
 	}
 }
 </script>
