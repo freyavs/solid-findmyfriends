@@ -12,6 +12,7 @@ const fetcher = new $rdf.Fetcher(store);
 export default new Vuex.Store({
   state: {
     loggedIn: false,
+    sharingLocation: false,
     popupUri: "https://solid.github.io/solid-auth-client/dist/popup.html",
     webId: "",
     name: "",
@@ -39,7 +40,7 @@ export default new Vuex.Store({
   actions: {
     login({ commit, dispatch }, webId) {
       commit("LOGIN", webId)
-      //dispatch('resolveName')
+      dispatch('resolveName')
       dispatch('resolveFriends')
     },
     logout({ commit }) {
