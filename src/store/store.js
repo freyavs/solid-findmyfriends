@@ -13,6 +13,7 @@ export default new Vuex.Store({
   state: {
     loggedIn: false,
     sharingLocation: false,
+    currentLocation: null,
     popupUri: "https://solid.github.io/solid-auth-client/dist/popup.html",
     webId: "",
     name: "",
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     },
     LOCATION_OFF(state) {
       state.sharingLocation = false;
+    },
+    SET_LOCATION(state,location){
+      state.currentLocation = location
     },
     SET_NAME(state, name) {
       state.name = name;
@@ -60,7 +64,7 @@ export default new Vuex.Store({
     },
 		fetchStore({ state }){
 			return state.fetcher.load(state.webId)
-		},
+    },
 		resolveName({ commit, state }){
       const person = state.webId;
       state.fetcher.load(person).then(() => {
@@ -79,6 +83,19 @@ export default new Vuex.Store({
           const fullName = state.store.any(friend, FOAF('name'))
           commit("ADD_FRIEND", fullName.value)
         })
+      })
+    },
+    fetchLocation({commit}){
+      if(!("geolocation" in navigator)) {
+        console.log("Geolocation is not available")
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(pos => {
+        commit('SET_LOCATION', pos)
+        console.log(pos)
+      }, err => {
+        console.log(err.message)
       })
     }
   },
