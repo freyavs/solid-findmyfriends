@@ -13,12 +13,9 @@ const fetcher = new $rdf.Fetcher(store);
 export default new Vuex.Store({
   state: {
     loggedIn: false,
-    currentLocation: null,
     popupUri: "https://solid.github.io/solid-auth-client/dist/popup.html",
     webId: "",
     name: "",
-    store: store,
-    fetcher: fetcher,
     friends: [],
 		friendnames: []
   },
@@ -55,19 +52,19 @@ export default new Vuex.Store({
       commit("LOGOUT");
     },
 		fetchStore({ state }){
-			return state.fetcher.load(state.webId)
+			return fetcher.load(state.webId)
 		},
 		resolveName({ commit, state }){
-      const fullName = state.store.any($rdf.sym(state.webId), FOAF("name"));
+      const fullName = store.any($rdf.sym(state.webId), FOAF("name"));
       commit("SET_NAME", fullName.value);
     },
     resolveFriends({commit, state}){
       const person = state.webId;
-      const friends = state.store.each($rdf.sym(person), FOAF("knows"));
+      const friends = store.each($rdf.sym(person), FOAF("knows"));
       friends.forEach( (friend) => {
-				state.fetcher.load(friend).then(() => {
+				fetcher.load(friend).then(() => {
           commit("ADD_FRIEND", friend)
-					commit("ADD_FRIEND_NAME", state.store.any(friend, FOAF('name')).value)
+					commit("ADD_FRIEND_NAME", store.any(friend, FOAF('name')).value)
         })
       })
     }
