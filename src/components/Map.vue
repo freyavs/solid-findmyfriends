@@ -15,7 +15,6 @@ export default {
     return {
       map: null,
       marker: null
-      //this.marker = L.marker(this.currentLocation.latlng).addTo(this.map)
     };
   },
   watch: {

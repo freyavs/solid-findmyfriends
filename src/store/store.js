@@ -33,16 +33,17 @@ export default new Vuex.Store({
       state.friends = []
     },
     LOCATION_ON(state) {
-      state.sharingLocation = true;
+      state.sharingLocation = true
     },
     LOCATION_OFF(state) {
-      state.sharingLocation = false;
+      state.sharingLocation = false
+			state.currentLocation = null
     },
     SET_LOCATION(state,location){
       state.currentLocation = location
     },
     SET_NAME(state, name) {
-      state.name = name;
+      state.name = name
     },
     ADD_FRIEND(state, friend){
       state.friends.push(friend) 
@@ -94,7 +95,6 @@ export default new Vuex.Store({
 
       navigator.geolocation.getCurrentPosition(pos => {
         commit('SET_LOCATION', pos)
-        console.log(pos)
       }, err => {
         console.log(err.message)
       })

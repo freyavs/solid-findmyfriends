@@ -24,7 +24,7 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 button {
 	padding: 5px;
 	margin: 5px;
