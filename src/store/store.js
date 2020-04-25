@@ -18,7 +18,8 @@ export default new Vuex.Store({
     name: "",
     store: store,
     fetcher: fetcher,
-    friends: []
+    friends: [],
+		friendnames: []
   },
   mutations: {
     LOGIN(state, webId) {
@@ -35,7 +36,10 @@ export default new Vuex.Store({
     },
     ADD_FRIEND(state, friend){
       state.friends.push(friend) 
-    }
+    },
+		ADD_FRIEND_NAME(state, name){
+			state.friendnames.push(name)
+		}
   },
   actions: {
     login({ commit, dispatch }, webId) {
@@ -62,20 +66,12 @@ export default new Vuex.Store({
       friends.forEach( (friend) => {
 				state.fetcher.load(friend).then(() => {
           commit("ADD_FRIEND", friend)
+					commit("ADD_FRIEND_NAME", state.store.any(friend, FOAF('name')).value)
         })
       })
     }
   },
 	getters: {
-		friendNames: state => {
-			let names = []
-      state.friends.forEach( (friend) => {
-				state.fetcher.load(friend).then(() => {
-           names.push(state.store.any(friend, FOAF('name')).value)
-        })
-      })
-			return names
-		}
 	},
   modules: {},
 });

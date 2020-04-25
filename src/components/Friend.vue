@@ -1,15 +1,15 @@
 <template>
     <div>
-      <h3 v-for="friend in friendNames" :key="friend">{{ friend }}</h3>
+      <h3 v-for="friend in friendnames" :key="friend">{{ friend }}</h3>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
 	computed: {
-		...mapGetters(['friendNames'])
+		...mapState(['friendnames'])
 	}
 }
 </script>
