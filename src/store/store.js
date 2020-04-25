@@ -39,32 +39,42 @@ export default new Vuex.Store({
   actions: {
     login({ commit, dispatch }, webId) {
       commit("LOGIN", webId)
-      //dispatch('resolveName')
-      dispatch('resolveFriends')
+			dispatch('fetchStore')
+				.then( () => {
+					dispatch('resolveName')
+					dispatch('resolveFriends')
+				})
     },
     logout({ commit }) {
       commit("LOGOUT");
     },
+		fetchStore({ state }){
+			return state.fetcher.load(state.webId)
+		},
 		resolveName({ commit, state }){
-      const person = state.webId;
-      state.fetcher.load(person).then(() => {
-        const fullName = state.store.any($rdf.sym(person), FOAF("name"));
-        commit("SET_NAME", fullName.value);
-      });
+      const fullName = state.store.any($rdf.sym(state.webId), FOAF("name"));
+      commit("SET_NAME", fullName.value);
     },
     resolveFriends({commit, state}){
-      console.log("fetching friends")
-      const person = "https://ruben.verborgh.org/profile/#me";
+      const person = state.webId;
       const friends = state.store.each($rdf.sym(person), FOAF("knows"));
-      console.log(friends)
       friends.forEach( (friend) => {
-        console.log(friend)
-        state.fetcher.load(friend).then(() => {
-          const fullName = state.store.any(friend, FOAF('name'))
-          commit("ADD_FRIEND", fullName.value)
+				state.fetcher.load(friend).then(() => {
+          commit("ADD_FRIEND", friend)
         })
       })
     }
   },
+	getters: {
+		friendNames: state => {
+			let names = []
+      state.friends.forEach( (friend) => {
+				state.fetcher.load(friend).then(() => {
+           names.push(state.store.any(friend, FOAF('name')).value)
+        })
+      })
+			return names
+		}
+	},
   modules: {},
 });

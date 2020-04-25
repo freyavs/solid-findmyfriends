@@ -1,19 +1,19 @@
 <template>
     <div>
-        <ul>
-            <li v-for="friend in friends" :key="friend" > {{friend}} </li>
-        </ul>
+      <h3 v-for="(friend, key) in friendNames" :key="friend">{{ friendNames[key] }}</h3>
     </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
-computed: mapState(["friends"])
-};
+	computed: {
+		friendNames() {
+			return this.$store.getters.friendNames
+		}
+	}
+}
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
