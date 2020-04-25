@@ -1,17 +1,17 @@
 <template>
     <div>
-        <ul>
-            <li v-for="friend in friends" :key="friend" > {{friend}} </li>
-        </ul>
+      <h3 v-for="friend in friendnames" :key="friend">{{ friend }}</h3>
     </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 export default {
-computed: mapState(["friends"])
-};
+	computed: {
+		...mapState(['friendnames'])
+	}
+}
 </script>
 
 <style lang="scss" scoped>
