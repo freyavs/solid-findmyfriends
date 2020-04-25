@@ -30,6 +30,12 @@ export default new Vuex.Store({
       state.webId = "";
       state.friends = []
     },
+    LOCATION_ON(state) {
+      state.sharingLocation = true;
+    },
+    LOCATION_OFF(state) {
+      state.sharingLocation = false;
+    },
     SET_NAME(state, name) {
       state.name = name;
     },
@@ -48,6 +54,12 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       commit("LOGOUT");
+    },
+    locationSharingOn({commit}) {
+      commit("LOCATION_ON")
+    },
+    locationSharingOff({commit}) {
+      commit("LOCATION_OFF")
     },
 		fetchStore({ state }){
 			return state.fetcher.load(state.webId)

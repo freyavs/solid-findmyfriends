@@ -1,18 +1,17 @@
 <template>
   <div class="site">
     <div class="map"></div>
-    <Friend class="friendslist"></Friend>
+    <div class="friendslist"></div>
     <Me class="me"></Me>
   </div>
 </template>
 
 <script>
 import Me from '@/components/Me.vue'
-import Friend from '@/components/Friend.vue'
 
 export default {
 	components: {
-		Me, Friend	
+		Me
 	}
 }
 </script>
@@ -50,11 +49,11 @@ div {
 }
 @media screen and (min-width: 950px) {
   .site {
-    grid-template-rows: 10fr 1fr;
+    grid-template-rows: 1fr 10fr;
     grid-template-columns: 2fr 5fr;
     grid-template-areas:
-      "friends map"
-      "me map";
+      "me map"
+      "friends map";
   }
 }
 </style>
