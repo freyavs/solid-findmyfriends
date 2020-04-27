@@ -13,9 +13,12 @@ export default {
   props: (['src']),
    asyncComputed: {
         async friends(){
+          //todo: return list
             let person = data[this.src]
-            for await (const name of person.friends.firstName) {
-              console.log("friend: " + name)
+            let friends = []
+            for await (const webid of person.friends) {
+              console.log("friend: " + webid)
+              friends.push(webid)
             }
         }
     }  
