@@ -1,7 +1,6 @@
 <template>
     <div>
         <h3>{{ name }}</h3>
-        <p>{{src}}</p>
     </div>
 </template>
 

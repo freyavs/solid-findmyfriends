@@ -1,5 +1,6 @@
 <template>
   <div v-if="loggedIn">
+    <ProfileImage :src="webId"/>
     <Name :src="webId"/>
     <ToggleButton/>
   </div>
@@ -9,11 +10,13 @@
 import { mapState } from "vuex";
 import ToggleButton from '@/components/ToggleButton.vue';
 import Name from '@/components/solid/Name.vue';
+import ProfileImage from '@/components/solid/ProfileImage.vue';
 
 export default {
   components:{
     ToggleButton,
-    Name
+    Name,
+    ProfileImage
   },
   computed: mapState(["webId", "loggedIn"])
 };

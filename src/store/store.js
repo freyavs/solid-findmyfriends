@@ -10,8 +10,6 @@ export default new Vuex.Store({
     loggedIn: false,
     popupUri: "https://solid.github.io/solid-auth-client/dist/popup.html",
     webId: "",
-    friends: [],
-		friendnames: []
   },
   mutations: {
     LOGIN(state, webId) {
