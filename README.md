@@ -2,9 +2,9 @@
 
 This is an assignment for the course web development taught by professor Ruben Verborgh at Ghent University
 
-This application uses solidpods to store and share your locationdata.
+This application uses solid and linked data to store and share your location on a decentralized way. 
 
-## Project setup
+#### To run the project clone the repository and use:
 ```
 npm install
 ```
