@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span>{{ name }}</span>
+        <h3>{{ name }}</h3>
     </div>
 </template>
 
@@ -12,8 +12,8 @@ export default {
     props:['src'],
     asyncComputed: {
         async name(){
-            const person = data[this.src]
-            return await person.label
+            let person = data[this.src]
+            return person.name
         }
     }  
 }

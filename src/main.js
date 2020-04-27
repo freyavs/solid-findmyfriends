@@ -24,6 +24,9 @@ requireComponent.keys().forEach(fileName => {
   Vue.component(componentName, componentConfig.default || componentConfig)
 })
 
+//voor async
+//window.setImmediate = window.setTimeout
+
 Vue.config.productionTip = false
 
 Vue.use(AsyncComputed);
@@ -31,5 +34,8 @@ Vue.use(AsyncComputed);
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  mounted() {
+    global.setImmediate()
+  },
 }).$mount('#app')

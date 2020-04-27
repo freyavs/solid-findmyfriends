@@ -1,7 +1,6 @@
 <template>
   <div v-if="loggedIn">
-    <h3 v-if="loggedIn">{{ name }}</h3>
-    <Value :src="webId"/>
+    <Name :src="webId"/>
     <ToggleButton/>
   </div>
 </template>
@@ -9,14 +8,14 @@
 <script>
 import { mapState } from "vuex";
 import ToggleButton from '@/components/ToggleButton.vue';
-import Value from '@/components/ldflex/Value.vue';
+import Name from '@/components/solid/Name.vue';
 
 export default {
   components:{
     ToggleButton,
-    Value
+    Name
   },
-  computed: mapState(["webId", "name", "loggedIn"])
+  computed: mapState(["webId", "loggedIn"])
 };
 </script>
 
