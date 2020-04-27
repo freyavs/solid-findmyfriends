@@ -1,6 +1,7 @@
 <template>
     <div>
         <h3>{{ name }}</h3>
+        <p>{{src}}</p>
     </div>
 </template>
 
@@ -13,7 +14,7 @@ export default {
     asyncComputed: {
         async name(){
             let person = data[this.src]
-            return person.name
+            return await person.name
         }
     }  
 }
