@@ -1,20 +1,22 @@
 <template>
   <div class="site">
     <Map class="map"></Map>
-    <Friend class="friendslist"></Friend>
+    <FriendList :src="webId" class="friendslist"></FriendList>
     <Me class="me"></Me>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Me from '@/components/Me.vue'
-import Friend from '@/components/Friend.vue'
+import FriendList from '@/components/solid/FriendList.vue'
 import Map from '@/components/Map.vue'
 
 export default {
 	components: {
-		Me, Friend, Map	
-	}
+		Me, FriendList, Map	
+  },
+  computed: mapState(['webId'])
 }
 </script>
 
