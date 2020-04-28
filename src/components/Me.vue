@@ -1,8 +1,12 @@
 <template>
 	<div> 
-    <ProfileImage :src="webId"/>
-    <Name :src="webId"/>
-    <ToggleButton/>
+			<div v-if="loggedIn">	
+				<ProfileImage :src="webId"/>
+			</div>
+			<div class="container" v-if="loggedIn">
+				<Name :src="webId"/>
+				<ToggleButton/>
+			</div>
   </div>
 </template>
 
@@ -22,4 +26,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+</style>

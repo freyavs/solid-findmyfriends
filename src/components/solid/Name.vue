@@ -19,6 +19,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+h3 {
+	margin: 10px;
+	text-align: left;
+}
 </style>

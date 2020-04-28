@@ -46,7 +46,11 @@ export default {
 .me {
   background-color: #ffaf5f;
   grid-area: me;
+	
+	display: flex;
+	align-items: center;
 }
+
 @media screen and (min-width: 950px) {
   .site {
     grid-template-rows: 1fr 10fr;
