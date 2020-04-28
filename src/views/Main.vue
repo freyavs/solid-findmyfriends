@@ -19,13 +19,9 @@ export default {
 </script>
 
 <style scoped>
-div {
-  border-radius: 8px;
-}
 .site {
-  height: 95%;
+  height: 100%;
   display: grid;
-  grid-gap: 3px;
 
   grid-template-rows: 6fr 4fr 1fr;
   grid-template-columns: 1fr;

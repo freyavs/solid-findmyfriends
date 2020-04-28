@@ -1,7 +1,7 @@
 <template>
-  <div v-if="loggedIn">
+  <div>
     <h3 v-if="loggedIn">{{ name }}</h3>
-    <ToggleButton/>
+    <ToggleButton v-if="loggedIn"/>
   </div>
 </template>
 
