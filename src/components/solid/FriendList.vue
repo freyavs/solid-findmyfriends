@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<FriendCard v-for="friend in friends" :key="friend" :friendId="friend"/> 
+		<div class="scrollable">
+			<FriendCard v-for="friend in friends" :key="friend" :friendId="friend"/> 
+		</div>
 	</div>
 </template>
 
@@ -28,4 +30,10 @@ export default {
 </script>
 
 <style scoped>
+.scrollable {
+	height: 100%;
+  -webkit-overflow-scrolling: touch;
+
+	overflow-y: auto;
+}
 </style>

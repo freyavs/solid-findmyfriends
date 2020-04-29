@@ -22,10 +22,9 @@ export default {
 
 <style scoped>
 .site {
-  height: 100%;
   display: grid;
 
-  grid-template-rows: 6fr 4fr 1fr;
+  grid-template-rows: 5fr 4fr 1fr;
   grid-template-columns: 1fr;
   grid-template-areas:
     "map"
@@ -53,7 +52,7 @@ export default {
 
 @media screen and (min-width: 950px) {
   .site {
-    grid-template-rows: 1fr 10fr;
+    grid-template-rows: 1fr 8fr;
     grid-template-columns: 2fr 5fr;
     grid-template-areas:
       "me map"
