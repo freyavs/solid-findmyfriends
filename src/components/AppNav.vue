@@ -22,9 +22,11 @@ export default {
 	align-items: center;
   justify-content: space-between;
   min-height: 50px;
-  background-color: #77dd77;
+  background-color: #1a0841;
+  background-color: #4f9da6;
 }
 .navtitle {
 	margin: 10px;
+	color: white;
 }
 </style>
