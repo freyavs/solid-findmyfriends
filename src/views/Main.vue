@@ -3,7 +3,6 @@
     <Map class="map"></Map>
     <FriendList :src="webId" class="friendslist"></FriendList>
     <Me class="me"></Me>
-		<p>{{get}}</p>
   </div>
 </template>
 
@@ -12,34 +11,12 @@ import { mapState } from "vuex";
 import Me from '@/components/Me.vue'
 import FriendList from '@/components/solid/FriendList.vue'
 import Map from '@/components/Map.vue'
-const auth = require('solid-auth-client')
-const FC   = require('solid-file-client')
-const fc   = new FC( auth )
-const {default: data} = require('@solid/query-ldflex')
 
 export default {
 	components: {
 		Me, FriendList, Map	
   },
-  computed: mapState(['webId']),
-	asyncComputed: {
-		async get() {
-			if(fc.itemExists('https://thdossch.solid.community/public/location.ttl')){
-				let content = await fc.readFile('https://thdossch.solid.community/public/location.ttl')
-				console.log(content)
-				console.log(this.webId)
-			}
-    },
-    async getRegistry(){
-      let person = data["https://fvspeybr.inrupt.net/profile/card#me"]
-      let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
-      console.log("reg: " + registry)
-
-      let regcont = await fc.readFile(registry)
-      console.log(regcont)
-     
-    }
-  }
+  computed: mapState(['webId'])
 }
 </script>
 

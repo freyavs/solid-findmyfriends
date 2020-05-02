@@ -4,7 +4,6 @@ export const state = {
     sharingLocation: false,
     currentLocation: null,
     interval: null,
-    file: "/public/location.ttl",
     geo: "http://www.w3.org/2003/01/geo/wgs84_pos#",
     foaf: "http://xmlns.com/foaf/0.1/"
 }

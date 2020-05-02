@@ -18,9 +18,12 @@ export default {
 			if(!session){
 				this.$store.dispatch('logout')
 			}else{
-				this.$store.dispatch('login', session.webId)
+        this.$store.dispatch('login', session.webId)
+
+        //when user is logged in, either find its location file or make one
+        this.$store.dispatch('setLocationFile', session.webId)
 			}
-		})
+    })
 	}
 }
 </script>
