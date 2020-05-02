@@ -1,3 +1,5 @@
+const auth = require('solid-auth-client')
+
 export const state = {
     sharingLocation: false,
     currentLocation: null,
@@ -67,18 +69,28 @@ export const actions = {
           ].
     }`
 
+    /*
     //TODO: DELETE + INSERT om punt aan te passen
-  /*const query = `
-  DELETE { <profile/card#me> a ?p }
- `*/
+  const query2 = `
+    DELETE { <https://fvspeybr.inrupt.net/profile/card#me> ?p ?o }
+ `
+ */
     
   // Send a PATCH request to update the source
-  const response = await fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
+  const response = await auth.fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
     credentials: 'include',
   });
+/*
+  const response2 = await auth.fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/sparql-update' },
+    body: query2,
+    credentials: 'include',
+  });
+  console.log(response2.status)*/
   return response.status === 200;
 }
 

@@ -15,6 +15,7 @@ import Map from '@/components/Map.vue'
 const auth = require('solid-auth-client')
 const FC   = require('solid-file-client')
 const fc   = new FC( auth )
+const {default: data} = require('@solid/query-ldflex')
 
 export default {
 	components: {
@@ -28,8 +29,17 @@ export default {
 				console.log(content)
 				console.log(this.webId)
 			}
-		}
-	}
+    },
+    async getRegistry(){
+      let person = data["https://fvspeybr.inrupt.net/profile/card#me"]
+      let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
+      console.log("reg: " + registry)
+
+      let regcont = await fc.readFile(registry)
+      console.log(regcont)
+     
+    }
+  }
 }
 </script>
 
