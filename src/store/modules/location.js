@@ -82,7 +82,6 @@ export const actions = {
   return response.status === 200;
 }
 
-
  // Escapes the IRI for use in a SPARQL query
  function escape (iri) {
   // More of a sanity check, really
