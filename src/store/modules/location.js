@@ -1,7 +1,10 @@
 export const state = {
     sharingLocation: false,
     currentLocation: null,
-    interval: null
+    interval: null,
+    file: "/public/location.ttl",
+    geo: "http://www.w3.org/2003/01/geo/wgs84_pos#",
+    foaf: "http://xmlns.com/foaf/0.1/"
 }
 
 export const mutations = {
@@ -46,8 +49,35 @@ export const actions = {
 
   navigator.geolocation.getCurrentPosition(pos => {
     commit('SET_LOCATION', pos)
+    updateLocation()
   }, err => {
     console.log(err.message)
   })
  }
+
+ async function updateLocation() {
+  // Create the SPARQL UPDATE query
+  const query = `
+    INSERT DATA {
+      [] <${state.foaf}Person>   <${escape("https://fvspeybr.inrupt.net/profile/card#me")}>;
+         <${state.geo}lat>      "3.3";
+         <${state.geo}long>  "50.3".
+    }`
+  // Send a PATCH request to update the source
+  const response = await fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/sparql-update' },
+    body: query,
+    credentials: 'include',
+  });
+  return response.status === 200;
+}
+
+ // Escapes the IRI for use in a SPARQL query
+ function escape (iri) {
+  // More of a sanity check, really
+  if (!iri || !/^\w+:[^<> ]+$/.test(iri))
+    throw new Error(`Invalid IRI: ${iri}`);
+  return iri;
+}
 
