@@ -5,21 +5,17 @@ import * as location from '@/store/modules/location.js'
 Vue.use(Vuex);
 
 const auth = require('solid-auth-client')
-
-//files:
 const FC   = require('solid-file-client')
 const fc   = new FC( auth )
 
-//ldflex:
 const {default: data} = require('@solid/query-ldflex')
 
-//n3 voor parsen van files:
-const N3 = require('n3');
 
+const N3 = require('n3');
 //stel baseIRI in zodat juist absolute pad van location.ttl gegeven wordt
 const parser = new N3.Parser({baseIRI: "https://fvspeybr.inrupt.net/profile/card#me" });
 
-//const forClass = "http://www.w3.org/ns/solid/terms#forClass";
+//klasse die solid:forClass aangeeft van de location file die we zoeken
 const geoPoint = "http://www.w3.org/2003/01/geo/wgs84_pos#Point";
 
 export default new Vuex.Store({
@@ -75,7 +71,7 @@ export default new Vuex.Store({
        }) 
 
        if (!foundLocation){
-         //TODO: maak file aan én stel .acl juist in! (dus niemand mag lezen behalve de owner)
+         locationFile = await createLocationFile();
        }
        commit("SET_LOCATION_FILE", locationFile)
     }
@@ -84,3 +80,8 @@ export default new Vuex.Store({
 		location
 	},
 });
+
+async function createLocationFile(){
+  //TODO: maak file aan + stel .acl juist in! (dus niemand mag lezen behalve de owner) + update de public index registry
+  return ""
+}
