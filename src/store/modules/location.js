@@ -58,11 +58,20 @@ export const actions = {
  async function updateLocation() {
   // Create the SPARQL UPDATE query
   const query = `
-    INSERT DATA {
-      [] <${state.foaf}Person>   <${escape("https://fvspeybr.inrupt.net/profile/card#me")}>;
-         <${state.geo}lat>      "3.3";
-         <${state.geo}long>  "50.3".
+    INSERT {
+     <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+          <${state.foaf}based_near> [
+          a <${state.geo}Point>;
+         <${state.geo}lat>      ${state.currentLocation.coords.latitude};
+         <${state.geo}long>     ${state.currentLocation.coords.longitude};
+          ].
     }`
+
+    //TODO: DELETE + INSERT om punt aan te passen
+  /*const query = `
+  DELETE { <profile/card#me> a ?p }
+ `*/
+    
   // Send a PATCH request to update the source
   const response = await fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
     method: 'PATCH',
@@ -72,6 +81,7 @@ export const actions = {
   });
   return response.status === 200;
 }
+
 
  // Escapes the IRI for use in a SPARQL query
  function escape (iri) {
