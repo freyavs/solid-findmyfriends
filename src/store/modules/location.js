@@ -57,10 +57,11 @@ export const actions = {
  }
 
  async function updateLocation() {
+   console.log("UPDATING_LOCATION")
   // Create the SPARQL UPDATE query
   const query = `
     INSERT {
-     <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+     <${escape("https://thdossch.solid.community/profile/card#me")}> a <${state.foaf}Person>;
           <${state.foaf}based_near> [
           a <${state.geo}Point>;
          <${state.geo}lat>      ${state.currentLocation.coords.latitude};
@@ -76,7 +77,7 @@ export const actions = {
  */
     
   // Send a PATCH request to update the source
-  const response = await auth.fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
+  const response = await auth.fetch("https://thdossch.solid.community/profile/card#me", {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
@@ -90,6 +91,7 @@ export const actions = {
     credentials: 'include',
   });
   console.log(response2.status)*/
+     console.log("UPDATING_LOCATION DONE, status = " + response.status)
   return response.status === 200;
 }
 
