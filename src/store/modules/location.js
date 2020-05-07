@@ -58,40 +58,36 @@ export const actions = {
 
  async function updateLocation() {
   // Create the SPARQL UPDATE query
-  const query = `
-    INSERT {
-     <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
-          <${state.foaf}based_near> [
-          a <${state.geo}Point>;
-         <${state.geo}lat>      ${state.currentLocation.coords.latitude};
-         <${state.geo}long>     ${state.currentLocation.coords.longitude};
-          ].
-    }`
+    const query = `
+    DELETE DATA { 
+      <https://fvspeybr.inrupt.net/profile/card#me> <${state.foaf}based_near>  ?o . 
+       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
+    } 
+    INSERT DATA{
+      <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+           <${state.foaf}based_near> [
+           a <${state.geo}Point>;
+          <${state.geo}lat>      ${state.currentLocation.coords.latitude};
+          <${state.geo}long>     ${state.currentLocation.coords.longitude};
+           ].
+     }
+    WHERE {  
+      <https://fvspeybr.inrupt.net/profile/card#me> <${state.foaf}based_near>  ?o . 
+       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
+    };
+    `
 
-    /*
-    //TODO: DELETE + INSERT om punt aan te passen
-  const query2 = `
-    DELETE { <https://fvspeybr.inrupt.net/profile/card#me> ?p ?o }
- `
- */
-    
   // Send a PATCH request to update the source
-  const response = await auth.fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
+  const response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
     credentials: 'include',
   });
-/*
-  const response2 = await auth.fetch("https://fvspeybr.inrupt.net/public/location.ttl", {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/sparql-update' },
-    body: query2,
-    credentials: 'include',
-  });
-  console.log(response2.status)*/
+
   return response.status === 200;
 }
+
 
  // Escapes the IRI for use in a SPARQL query
  function escape (iri) {
