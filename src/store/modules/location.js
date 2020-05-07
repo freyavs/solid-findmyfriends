@@ -57,6 +57,7 @@ export const actions = {
  }
 
  async function updateLocation() {
+   console.log("UPDATING_LOCATION")
   // Create the SPARQL UPDATE query
     const query = `
     DELETE DATA { 
@@ -85,6 +86,7 @@ export const actions = {
     credentials: 'include',
   });
 
+  console.log("UPDATING_LOCATION DONE, status = " + response.status)
   return response.status === 200;
 }
 

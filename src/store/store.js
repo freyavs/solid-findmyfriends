@@ -39,7 +39,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-		login({ commit }, webId) {
+    login({ commit }, webId) {
       commit("LOGIN", webId)
     },
     logout({ commit }) {
@@ -49,7 +49,7 @@ export default new Vuex.Store({
     async setLocationFile({commit}, webId) {
       let person = data[webId]
       let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
-      console.log("registry url: " + registry)
+      console.log("REGISTER: " + registry)
 
       //parse registry 
       let regcont = await fc.readFile(registry)
@@ -61,7 +61,7 @@ export default new Vuex.Store({
           if (quad &&  locationFile == ""){
             //de quad na aangeven van Point (quad die dus de solid:forClass geo:Point; bevat) zal de link bevatten van de location file
             if (foundLocation) {
-                console.log("Found location file: " + quad.object.id)
+              console.log("LOCATION_FILE FOUND: " + quad.object.id)
                 locationFile = quad.object.id
             }
             if (quad.object.id == geoPoint){
@@ -71,17 +71,24 @@ export default new Vuex.Store({
        }) 
 
        if (!foundLocation){
+         console.log("LOCATION_FILE NOT FOUND")
          locationFile = await createLocationFile();
        }
        commit("SET_LOCATION_FILE", locationFile)
     }
   },
   modules: {
-		location
-	},
+    location
+  },
 });
 
 async function createLocationFile(){
+	console.log("CREATING_LOCATIONFILE")
   //TODO: maak file aan + stel .acl juist in! (dus niemand mag lezen behalve de owner) + update de public index registry
-  return ""
+	let url = "https://thdossch.solid.community/public/"
+	let awns = await fc.createFile(url + "location.ttl", "", "text/turtle")
+	console.log(awns)
+	
+	console.log("CREATING_LOCATIONFILE DONE")
+  return (url + "location.ttl") 
 }
