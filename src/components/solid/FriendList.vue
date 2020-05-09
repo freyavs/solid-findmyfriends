@@ -1,5 +1,9 @@
 <template>
 	<div>
+		<div class="addfriendcontainer">
+			<input v-model="friendurl" placeholder="Add a friend..."/>
+			<button v-on:click="addFriend">Add</button>
+		</div>
 		<div class="scrollable">
 			<FriendCard v-for="friend in friends" :key="friend" :friendId="friend"/> 
 		</div>
@@ -16,6 +20,17 @@ export default {
 		FriendCard
 	},
   props: (['src']),
+	data() {
+		return {
+			friendurl: ""
+		}
+	},
+	methods: {
+		addFriend(){
+			console.log("add friend: " + this.friendurl)
+			this.friendurl = ''
+		}
+	},
 	asyncComputed: {
 		async friends(){
 			let person = data[this.src]
@@ -30,10 +45,31 @@ export default {
 </script>
 
 <style scoped>
+.addfriendcontainer {
+	display: flex;
+	align-items: center;
+}
+
+button {
+	border-radius: 8px;
+	border: none;
+	width: wrap;
+	height: 30px;
+	margin: 10px 10px 10px 5px;
+}
+
+input{
+	width: 100%;
+	height: 30px;
+	border-radius: 12px;
+	border: none;
+	padding: 0 8px 0 8px;
+	margin: 10px 5px 10px 5px;
+}
+
 .scrollable {
 	height: 100%;
   -webkit-overflow-scrolling: touch;
-
 	overflow-y: auto;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="name">
         <h3>{{ name }}</h3>
     </div>
 </template>
@@ -20,6 +20,10 @@ export default {
 </script>
 
 <style scoped>
+.name {
+	width: 100%;
+}
+
 h3 {
 	margin: 10px;
 	text-align: left;
