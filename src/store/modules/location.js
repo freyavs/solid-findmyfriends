@@ -1,3 +1,5 @@
+import store from '../store'
+
 const auth = require('solid-auth-client')
 
 export const state = {
@@ -58,13 +60,15 @@ export const actions = {
 
  async function updateLocation() {
   // Create the SPARQL UPDATE query
+    let user = store.state.webId
+    let file = store.state.locationFile
     const query = `
     DELETE DATA { 
-      <https://fvspeybr.inrupt.net/profile/card#me> <${state.foaf}based_near>  ?o . 
+      <${escape(user)}> <${state.foaf}based_near>  ?o . 
        ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     } 
     INSERT DATA{
-      <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+      <${escape(user)}> a <${state.foaf}Person>;
            <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
@@ -72,13 +76,13 @@ export const actions = {
            ].
     }
     WHERE {  
-      <https://fvspeybr.inrupt.net/profile/card#me> <${state.foaf}based_near>  ?o . 
+      <${escape(user)}> <${state.foaf}based_near>  ?o . 
       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     };
     `
 
   // Send a PATCH request to update the source
-  let response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
+  let response = await auth.fetch(file, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
@@ -89,7 +93,7 @@ export const actions = {
   if (response.status == 409) {
     const query = `
     INSERT DATA{
-      <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+      <${escape(user)}> a <${state.foaf}Person>;
            <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
@@ -98,7 +102,7 @@ export const actions = {
     }
     `
   // Send a PATCH request to update the source
-  response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
+  response = await auth.fetch(file, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,

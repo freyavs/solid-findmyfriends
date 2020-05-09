@@ -63,6 +63,7 @@ export default new Vuex.Store({
             if (foundLocation) {
               console.log("LOCATION_FILE FOUND: " + quad.object.id)
                 locationFile = quad.object.id
+                commit("SET_LOCATION_FILE", locationFile)
             }
             if (quad.object.id == geoPoint){
               foundLocation = true
@@ -73,8 +74,8 @@ export default new Vuex.Store({
        if (!foundLocation){
          console.log("LOCATION_FILE NOT FOUND")
          locationFile = await createLocationFile();
+         commit("SET_LOCATION_FILE", locationFile)
        }
-       commit("SET_LOCATION_FILE", locationFile)
     }
   },
   modules: {
