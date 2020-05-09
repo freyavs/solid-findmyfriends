@@ -57,7 +57,6 @@ export const actions = {
  }
 
  async function updateLocation() {
-   console.log("UPDATING_LOCATION")
   // Create the SPARQL UPDATE query
     const query = `
     DELETE DATA { 
@@ -71,22 +70,41 @@ export const actions = {
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
           <${state.geo}long>     ${state.currentLocation.coords.longitude};
            ].
-     }
+    }
     WHERE {  
       <https://fvspeybr.inrupt.net/profile/card#me> <${state.foaf}based_near>  ?o . 
-       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
+      ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     };
     `
 
   // Send a PATCH request to update the source
-  const response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
+  let response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
     credentials: 'include',
   });
 
-  console.log("UPDATING_LOCATION DONE, status = " + response.status)
+  //query failed, so this means for our app that the user / user location is not in the location file, send sparql query update to just insert data
+  if (response.status == 409) {
+    const query = `
+    INSERT DATA{
+      <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+           <${state.foaf}based_near> [
+           a <${state.geo}Point>;
+          <${state.geo}lat>      ${state.currentLocation.coords.latitude};
+          <${state.geo}long>     ${state.currentLocation.coords.longitude};
+           ].
+    }
+    `
+  // Send a PATCH request to update the source
+  response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/sparql-update' },
+    body: query,
+    credentials: 'include',
+  });
+  }
   return response.status === 200;
 }
 
