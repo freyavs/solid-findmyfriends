@@ -11,8 +11,6 @@ const fc	 = new FC( auth )
 const {default: data} = require('@solid/query-ldflex')
 
 const N3 = require('n3');
-//stel baseIRI in zodat juist absolute pad van location.ttl gegeven wordt
-const parser = new N3.Parser({baseIRI: "https://thdossch.solid.community/profile/card#me" });
 
 //const SolidAclUtils = require('solid-acl-utils')
 //const { AclApi, AclDoc, AclParser, AclRule, Permissions, Agents } = SolidAclUtils
@@ -53,7 +51,10 @@ export default new Vuex.Store({
 			//verkrijg publicTypeIndex			
 			let person = data[webId]
 			let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
-
+			
+			//stel baseIRI in zodat juist absolute pad van location.ttl gegeven wordt
+			const parser = new N3.Parser({baseIRI: webId});
+			
 			//parse registry 
 			let registerContent = await fc.readFile(registry)
 			const quads =	parser.parse(registerContent)
