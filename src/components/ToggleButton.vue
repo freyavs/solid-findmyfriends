@@ -16,7 +16,6 @@ export default {
         changeLocationSharing(){
             if (!this.sharingLocation){
                 this.$store.dispatch('locationSharingOn')
-                this.$store.dispatch('fetchLocation')
             }
             else {
                 this.$store.dispatch('locationSharingOff')

@@ -1,3 +1,5 @@
+import store from '../store'
+
 const auth = require('solid-auth-client')
 
 export const state = {
@@ -28,21 +30,46 @@ export const mutations = {
 export const actions = {
     locationSharingOn({commit}) {
       commit("LOCATION_ON")
-    },
-    locationSharingOff({commit}) {
-      commit("LOCATION_OFF")
-    },
-    fetchLocation({commit}){
       getGeoLocation(commit)
       let timer = setInterval(() => {
        getGeoLocation(commit)
       }
       , 5000) //set location every 5 seconds
       commit("SET_TIMER", timer)
+    },
+    locationSharingOff({commit}) {
+      commit("LOCATION_OFF")
+      removeLocation()
     }
  }
 
+ async function removeLocation(){
+  let user = store.state.webId
+
+  //when user stops location sharing, remove location from location file
+  const query = `
+  DELETE DATA { 
+    <${escape(user)}> <${state.foaf}based_near>  ?o . 
+     ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
+  } 
+  WHERE {  
+    <${escape(user)}> <${state.foaf}based_near>  ?o . 
+    ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
+  };
+  `
+  // Send a PATCH request to update 
+  let response = await auth.fetch(store.state.locationFile, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/sparql-update' },
+    body: query,
+    credentials: 'include',
+  });
+
+  return response.status === 200;
+}
+
  function getGeoLocation(commit){
+   console.log("updating location")
   if(!("geolocation" in navigator)) {
     console.log("Geolocation is not available")
     return;
@@ -58,13 +85,14 @@ export const actions = {
 
  async function updateLocation() {
   // Create the SPARQL UPDATE query
+    let user = store.state.webId
     const query = `
     DELETE DATA { 
-      <https://thdossch.solid.community/profile/card#me> <${state.foaf}based_near>  ?o . 
+      <${escape(user)}> <${state.foaf}based_near>  ?o . 
        ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     } 
     INSERT DATA{
-      <${escape("https://thdossch.solid.community/profile/card#me")}> a <${state.foaf}Person>;
+      <${escape(user)}> a <${state.foaf}Person>;
            <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
@@ -72,13 +100,13 @@ export const actions = {
            ].
     }
     WHERE {  
-      <https://thdossch.solid.community/profile/card#me> <${state.foaf}based_near>  ?o . 
+      <${escape(user)}> <${state.foaf}based_near>  ?o . 
       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     };
     `
 
   // Send a PATCH request to update the source
-  let response = await auth.fetch("https://thdossch.solid.community/public/location.ttl", {
+  let response = await auth.fetch(store.state.locationFile, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
@@ -89,7 +117,7 @@ export const actions = {
   if (response.status == 409) {
     const query = `
     INSERT DATA{
-      <${escape("https://thdossch.solid.community/profile/card#me")}> a <${state.foaf}Person>;
+      <${escape(user)}> a <${state.foaf}Person>;
            <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
@@ -98,7 +126,7 @@ export const actions = {
     }
     `
   // Send a PATCH request to update the source
-  response = await auth.fetch("https://thdossch.solid.community/public/location.ttl", {
+  response = await auth.fetch(store.state.locationFile, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
