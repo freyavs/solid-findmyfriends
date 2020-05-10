@@ -28,7 +28,9 @@ export default {
 	methods: {
 		addFriend(){
 			console.log("add friend: " + this.friendurl)
-			this.friendurl = ''
+			this.$store.dispatch('addFriend', this.friendurl)
+				this.friendurl = ''
+			this.$forceUpdate()
 		}
 	},
 	asyncComputed: {

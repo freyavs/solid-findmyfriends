@@ -6,8 +6,7 @@ export const state = {
     sharingLocation: false,
     currentLocation: null,
     interval: null,
-    geo: "http://www.w3.org/2003/01/geo/wgs84_pos#",
-    foaf: "http://xmlns.com/foaf/0.1/"
+    geo: "http://www.w3.org/2003/01/geo/wgs84_pos#"
 }
 
 export const mutations = {
@@ -49,11 +48,11 @@ export const actions = {
   //when user stops location sharing, remove location from location file
   const query = `
   DELETE DATA { 
-    <${escape(user)}> <${state.foaf}based_near>  ?o . 
+    <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
      ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
   } 
   WHERE {  
-    <${escape(user)}> <${state.foaf}based_near>  ?o . 
+    <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
     ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
   };
   `
@@ -88,19 +87,19 @@ export const actions = {
     let user = store.state.webId
     const query = `
     DELETE DATA { 
-      <${escape(user)}> <${state.foaf}based_near>  ?o . 
+      <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
        ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     } 
     INSERT DATA{
-      <${escape(user)}> a <${state.foaf}Person>;
-           <${state.foaf}based_near> [
+      <${escape(user)}> a <${store.state.foaf}Person>;
+           <${store.state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
           <${state.geo}long>     ${state.currentLocation.coords.longitude};
            ].
     }
     WHERE {  
-      <${escape(user)}> <${state.foaf}based_near>  ?o . 
+      <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     };
     `
@@ -117,8 +116,8 @@ export const actions = {
   if (response.status == 409) {
     const query = `
     INSERT DATA{
-      <${escape(user)}> a <${state.foaf}Person>;
-           <${state.foaf}based_near> [
+      <${escape(user)}> a <${store.state.foaf}Person>;
+           <${store.state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
           <${state.geo}long>     ${state.currentLocation.coords.longitude};
