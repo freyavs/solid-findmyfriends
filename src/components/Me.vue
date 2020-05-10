@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import ToggleButton from '@/components/ToggleButton.vue';
-import Name from '@/components/solid/Name.vue';
-import ProfileImage from '@/components/solid/ProfileImage.vue';
+import { mapState } from "vuex"
+import ToggleButton from '@/components/ToggleButton.vue'
+import Name from '@/components/solid/Name.vue'
+import ProfileImage from '@/components/solid/ProfileImage.vue'
 
 export default {
   components:{

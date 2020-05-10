@@ -4,57 +4,40 @@
 			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
 			<button v-on:click="addFriend">Add</button>
 		</div>
-		<div class="scrollable" :key="componentKey">
-			<FriendCard v-for="friend in friends" :key="friend" :friendId="friend"/> 
+		<div class="scrollable">
+			<FriendCard v-for="friend in friends" :key="friend.webId.toString()" :friendId="friend.webId"/> 
 		</div>
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import FriendCard from '@/components/FriendCard.vue'
-
-const {default: data} = require('@solid/query-ldflex')
 
 export default {
 	components: {
 		FriendCard
 	},
-  props: (['src']),
+	computed: mapState({
+		friends: state => state.friends.friends
+	}),
 	data() {
 		return {
-			friendurl: "",
-			componentKey: 0,
+			friendurl: null,
 		}
 	},
 	methods: {
-	forceRerender() {
-      this.componentKey += 1
-    },
-	async addFriend(){
-		console.log("add friend: " + this.friendurl)
-		let success = await this.$store.dispatch('addFriend', this.friendurl)
-		this.friendurl = ''
-		if (success){
-    //TODO: rerender met friend
-			setTimeout(() => this.forceRerender(), 10000);
-			console.log("adding friend: success")
+		async addFriend(){
+			let success = await this.$store.dispatch('addFriend', this.friendurl)
+			if (success){
+				console.log("Friend add succes")
+				this.friendurl = null 
+			}
+			else {
+				alert("Incorrect friend url, please try again.")
+			}
 		}
-		else {
-			alert("Incorrect friend url, please try again.")
-		}
-	}
 	},
-	asyncComputed: {
-		async friends(){
-			console.log(this.componentKey)
-			let person = data[this.src]
-			let friends = []
-			for await (const webid of person.friends) {
-				friends.push(webid.toString())
-		}
-		return friends
-		}
-	}  
 }
 </script>
 
