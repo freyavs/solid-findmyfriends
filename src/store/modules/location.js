@@ -30,9 +30,9 @@ export const actions = {
 		//set location every 5 seconds
 		commit("SET_TIMER", setInterval(() => { dispatch("getGeoLocation") } , 5000))
 	},
-	locationSharingOff({rootState, state, commit}) {
+	locationSharingOff({rootState, commit}) {
 		commit("LOCATION_OFF")
-		tools.removeLocation(rootState.webId, state.locationFile)
+		tools.removeLocation(rootState.webId, rootState.locationFile)
 	},
 	getGeoLocation({ rootState, state, commit }){
 		if(!("geolocation" in navigator)) {
