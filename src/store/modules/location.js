@@ -42,6 +42,21 @@ export const actions = {
       removeLocation()
     }
  }
+ 
+function getGeoLocation(commit){
+   console.log("updating location")
+  if(!("geolocation" in navigator)) {
+    console.log("Geolocation is not available")
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    commit('SET_LOCATION', pos)
+    updateLocation()
+  }, err => {
+    console.log(err.message)
+  })
+ }
 
  async function removeLocation(){
   let webId = store.state.webId
@@ -67,21 +82,6 @@ export const actions = {
 
   return response.status === 200;
 }
-
- function getGeoLocation(commit){
-   console.log("updating location")
-  if(!("geolocation" in navigator)) {
-    console.log("Geolocation is not available")
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(pos => {
-    commit('SET_LOCATION', pos)
-    updateLocation()
-  }, err => {
-    console.log(err.message)
-  })
- }
 
  async function updateLocation() {
   // Create the SPARQL UPDATE query
@@ -137,11 +137,8 @@ export const actions = {
 }
 
 
- // Escapes the IRI for use in a SPARQL query
- function escape (iri) {
-  // More of a sanity check, really
+function escape (iri) {
   if (!iri || !/^\w+:[^<> ]+$/.test(iri))
     throw new Error(`Invalid IRI: ${iri}`);
   return iri;
 }
-
