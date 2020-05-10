@@ -113,8 +113,8 @@ export default new Vuex.Store({
 			}
 			commit("SET_LOCATION_FILE", locationFile)
     },
-    requestLocation({state}, friendWebId){
-        console.log("requesting location" + state )
+    requestLocation( { state } , friendWebId){
+        console.log("requesting location of " + friendWebId )
         
         sn.discoverInboxUri(friendWebId, options.webClient).then( inbox => {
           console.log(inbox)
@@ -126,14 +126,18 @@ export default new Vuex.Store({
             headers: { 'Accept': 'application/ld+json;q=0.9,text/turtle;q=0.8' }
           }
            webClient.get(inbox, opts).then(x => {console.log(x)})
-          */
+          
           sn.list(friendWebId, options).then(contains => {
             console.log(contains);
-          })
+          })*/
         
-          var payload = '{ "@id": "http://example.net/note#foo", "http://schema.org/citation": { "@id": "http://example.org/article#results" } }';
-          sn.send(friendWebId, payload, options)
-        
+          var payload = {
+            "@context": "https://www.w3.org/ns/activitystreams",
+            "@id": "",
+            "type": "FindMyFriendsRequest",
+            "from": state.webId
+          }
+          sn.send(friendWebId, payload, options)   
         })
     }
 	},
