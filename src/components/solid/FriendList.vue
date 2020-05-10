@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="addfriendcontainer">
-			<input v-model="friendurl" placeholder="Add a friend..."/>
+			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
 			<button v-on:click="addFriend">Add</button>
 		</div>
 		<div class="scrollable">
@@ -22,7 +22,7 @@ export default {
   props: (['src']),
 	data() {
 		return {
-			friendurl: ""
+			friendurl: '' 
 		}
 	},
 	methods: {
