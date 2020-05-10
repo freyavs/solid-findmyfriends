@@ -10,10 +10,10 @@ import { mapState } from 'vuex'
 const auth = require('solid-auth-client')
 
 export default {
-	computed:  mapState(['loggedIn','popupUri','webId']),
+	computed:  mapState(['loggedIn', 'webId']),
 	methods: {
 		login: function() {
-			let popupUri = this.popupUri
+			let popupUri = "https://solid.github.io/solid-auth-client/dist/popup.html"
 			auth.popupLogin({ popupUri })		
 		},
 		logout: function() {
