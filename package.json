@@ -17,6 +17,7 @@
     "solid-acl-utils": "github:otto-aa/solid-acl-utils",
     "solid-auth-client": "^2.4.1",
     "solid-file-client": "^1.0.5",
+    "solid-web-client": "^0.3.2",
     "vue": "^2.6.11",
     "vue-async-computed": "^3.8.2",
     "vue-router": "^3.1.6",
