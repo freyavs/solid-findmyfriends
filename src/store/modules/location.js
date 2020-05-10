@@ -6,8 +6,7 @@ export const state = {
     sharingLocation: false,
     currentLocation: null,
     interval: null,
-    geo: "http://www.w3.org/2003/01/geo/wgs84_pos#",
-    foaf: "http://xmlns.com/foaf/0.1/"
+    geo: "http://www.w3.org/2003/01/geo/wgs84_pos#"
 }
 
 export const mutations = {

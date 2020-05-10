@@ -4,7 +4,7 @@
 			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
 			<button v-on:click="addFriend">Add</button>
 		</div>
-		<div class="scrollable">
+		<div class="scrollable" :key="componentKey">
 			<FriendCard v-for="friend in friends" :key="friend" :friendId="friend"/> 
 		</div>
 	</div>
@@ -22,23 +22,37 @@ export default {
   props: (['src']),
 	data() {
 		return {
-			friendurl: '' 
+			friendurl: "",
+			componentKey: 0,
 		}
 	},
 	methods: {
-		addFriend(){
-			console.log("add friend: " + this.friendurl)
-			this.friendurl = ''
+	forceRerender() {
+      this.componentKey += 1
+    },
+	async addFriend(){
+		console.log("add friend: " + this.friendurl)
+		let success = await this.$store.dispatch('addFriend', this.friendurl)
+		this.friendurl = ''
+		if (success){
+    //TODO: rerender met friend
+			setTimeout(() => this.forceRerender(), 10000);
+			console.log("adding friend: success")
 		}
+		else {
+			alert("Incorrect friend url, please try again.")
+		}
+	}
 	},
 	asyncComputed: {
 		async friends(){
+			console.log(this.componentKey)
 			let person = data[this.src]
 			let friends = []
 			for await (const webid of person.friends) {
 				friends.push(webid.toString())
-			}
-			return friends
+		}
+		return friends
 		}
 	}  
 }

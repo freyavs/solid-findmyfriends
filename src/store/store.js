@@ -25,7 +25,8 @@ export default new Vuex.Store({
 		loggedIn: false,
 		popupUri: "https://solid.github.io/solid-auth-client/dist/popup.html",
 		webId: "",
-		locationFile: ""
+		locationFile: "",
+    foaf: "http://xmlns.com/foaf/0.1/"
 	},
 	mutations: {
 		LOGIN(state, webId) {
@@ -47,6 +48,26 @@ export default new Vuex.Store({
 		logout({ commit }) {
 			commit("LOGOUT");
 		},
+    async addFriend({ state }, friendurl){
+      if (escape(friendurl) === ""){
+        return false
+      }
+
+      const query = `
+        INSERT DATA{
+          <${escape(state.webId)}> <${state.foaf}knows> <${escape(friendurl)}>
+        }
+        `
+      // Send a PATCH request to update the source
+      let response = await auth.fetch(state.webId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/sparql-update' },
+        body: query,
+        credentials: 'include',
+      });
+
+      return response.status === 200
+    },
 		async setLocationFile({commit}, webId) {
 			//verkrijg publicTypeIndex			
 			let person = data[webId]
@@ -99,4 +120,15 @@ async function createLocationFile(){
 	
 	console.log("CREATING_LOCATIONFILE DONE")
 	return (url + "location.ttl") 
+}
+
+
+//TODO: deze functie staat ook in location
+
+ // Escapes the IRI for use in a SPARQL query
+ function escape (iri) {
+  // More of a sanity check, really
+  if (!iri || !/^\w+:[^<> ]+$/.test(iri))
+    return ""
+  return iri;
 }
