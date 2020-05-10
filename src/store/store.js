@@ -34,7 +34,8 @@ export default new Vuex.Store({
 		popupUri: "https://solid.github.io/solid-auth-client/dist/popup.html",
 		webId: "",
 		locationFile: "",
-    foaf: "http://xmlns.com/foaf/0.1/"
+    foaf: "http://xmlns.com/foaf/0.1/",
+    friendsView: true
 	},
 	mutations: {
 		LOGIN(state, webId) {
