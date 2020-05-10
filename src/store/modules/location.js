@@ -43,16 +43,16 @@ export const actions = {
  }
 
  async function removeLocation(){
-  let user = store.state.webId
+  let webId = store.state.webId
 
   //when user stops location sharing, remove location from location file
   const query = `
   DELETE DATA { 
-    <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
+    <${escape(webId)}> <${state.foaf}based_near>  ?o . 
      ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
   } 
   WHERE {  
-    <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
+    <${escape(webId)}> <${state.foaf}based_near>  ?o . 
     ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
   };
   `
@@ -84,22 +84,22 @@ export const actions = {
 
  async function updateLocation() {
   // Create the SPARQL UPDATE query
-    let user = store.state.webId
+    let webId = store.state.webId
     const query = `
     DELETE DATA { 
-      <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
+      <${escape(webId)}> <${state.foaf}based_near>  ?o . 
        ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     } 
     INSERT DATA{
-      <${escape(user)}> a <${store.state.foaf}Person>;
-           <${store.state.foaf}based_near> [
+      <${escape(webId)}> a <${state.foaf}Person>;
+           <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
           <${state.geo}long>     ${state.currentLocation.coords.longitude};
            ].
     }
     WHERE {  
-      <${escape(user)}> <${store.state.foaf}based_near>  ?o . 
+      <${escape(webId)}> <${state.foaf}based_near>  ?o . 
       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     };
     `
@@ -116,8 +116,8 @@ export const actions = {
   if (response.status == 409) {
     const query = `
     INSERT DATA{
-      <${escape(user)}> a <${store.state.foaf}Person>;
-           <${store.state.foaf}based_near> [
+      <${escape(webId)}> a <${state.foaf}Person>;
+           <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
           <${state.geo}long>     ${state.currentLocation.coords.longitude};

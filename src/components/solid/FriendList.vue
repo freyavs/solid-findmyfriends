@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="addfriendcontainer">
-			<input v-model="friendurl" placeholder="Add a friend..."/>
+			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
 			<button v-on:click="addFriend">Add</button>
 		</div>
 		<div class="scrollable" :key="componentKey">
@@ -24,7 +24,6 @@ export default {
 		return {
 			friendurl: "",
 			componentKey: 0,
-			reload: true
 		}
 	},
 	methods: {
@@ -36,6 +35,7 @@ export default {
 		let success = await this.$store.dispatch('addFriend', this.friendurl)
 		this.friendurl = ''
 		if (success){
+    //TODO: rerender met friend
 			setTimeout(() => this.forceRerender(), 10000);
 			console.log("adding friend: success")
 		}
