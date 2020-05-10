@@ -48,11 +48,11 @@ export const actions = {
   //when user stops location sharing, remove location from location file
   const query = `
   DELETE DATA { 
-    <${escape(webId)}> <${state.foaf}based_near>  ?o . 
+    <${escape(webId)}> <${store.state.foaf}based_near>  ?o . 
      ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
   } 
   WHERE {  
-    <${escape(webId)}> <${state.foaf}based_near>  ?o . 
+    <${escape(webId)}> <${store.state.foaf}based_near>  ?o . 
     ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
   };
   `
@@ -87,19 +87,19 @@ export const actions = {
     let webId = store.state.webId
     const query = `
     DELETE DATA { 
-      <${escape(webId)}> <${state.foaf}based_near>  ?o . 
+      <${escape(webId)}> <${store.state.foaf}based_near>  ?o . 
        ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     } 
     INSERT DATA{
-      <${escape(webId)}> a <${state.foaf}Person>;
-           <${state.foaf}based_near> [
+      <${escape(webId)}> a <${store.state.foaf}Person>;
+           <${store.state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
           <${state.geo}long>     ${state.currentLocation.coords.longitude};
            ].
     }
     WHERE {  
-      <${escape(webId)}> <${state.foaf}based_near>  ?o . 
+      <${escape(webId)}> <${store.state.foaf}based_near>  ?o . 
       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     };
     `
@@ -116,8 +116,8 @@ export const actions = {
   if (response.status == 409) {
     const query = `
     INSERT DATA{
-      <${escape(webId)}> a <${state.foaf}Person>;
-           <${state.foaf}based_near> [
+      <${escape(webId)}> a <${store.state.foaf}Person>;
+           <${store.state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
           <${state.geo}long>     ${state.currentLocation.coords.longitude};
