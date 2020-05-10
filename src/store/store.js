@@ -47,6 +47,10 @@ export default new Vuex.Store({
       commit("LOGOUT");
     },
     async addFriend({ state }, friendurl){
+      if (escape(friendurl) === ""){
+        return false
+      }
+
       const query = `
         INSERT DATA{
           <${escape(state.webId)}> <${state.foaf}knows> <${escape(friendurl)}>
@@ -60,7 +64,7 @@ export default new Vuex.Store({
         credentials: 'include',
       });
 
-      return response.status
+      return response.status === 200
     },
     //maak een location file aan als die nog niet in public type index registry zit 
     async setLocationFile({commit}, webId) {
@@ -118,6 +122,6 @@ async function createLocationFile(){
  function escape (iri) {
   // More of a sanity check, really
   if (!iri || !/^\w+:[^<> ]+$/.test(iri))
-    throw new Error(`Invalid IRI: ${iri}`);
+    return ""
   return iri;
 }
