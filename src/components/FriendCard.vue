@@ -3,6 +3,7 @@
 		<ProfileImage :src="friendId"/>
 		<Name :src="friendId"/>
 		<button v-on:click="switchStatus">{{ action }}</button>
+		<button v-on:click="requestLocation">request location</button>
 	</div>
 </template>
 
@@ -33,6 +34,9 @@ export default {
 	methods: {
 		switchStatus(){
 			this.sharing = !this.sharing
+		},
+		requestLocation(){
+			this.$store.dispatch('requestLocation', this.friendId)
 		}
 	}
 }
