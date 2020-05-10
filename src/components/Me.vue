@@ -28,14 +28,14 @@ export default {
   },
   computed: mapState(["webId", "loggedIn", "friendsView"]),
   methods: {
-	  changeView(){
-		   if (!friendsView){
-                this.$store.dispatch('seeRequests')
-            }
-            else {
-                this.$store.dispatch('seeFriends')
-            }
-	  }
+	changeView(){
+		if (!this.friendsView){
+			this.$store.dispatch('seeRequests')
+		}
+		else {
+			this.$store.dispatch('seeFriends')
+		}
+	}
   }
 };
 </script>
