@@ -1,7 +1,7 @@
 <template>
   <div class="site">
     <Map class="map"></Map>
-    <FriendList :src="webId" class="friendslist"></FriendList>
+    <FriendList class="friendslist"></FriendList>
     <Me class="me"></Me>
   </div>
 </template>

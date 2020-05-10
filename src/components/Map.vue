@@ -22,6 +22,7 @@ export default {
   watch: {
     currentLocation: function() {
       if (this.currentLocation != null) {
+				//workaround leafletmarker not working
         let smallIcon = new L.Icon({
           iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png",
           iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon-2x.png",
