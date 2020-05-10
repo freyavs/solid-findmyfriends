@@ -60,11 +60,11 @@ export const actions = {
   // Create the SPARQL UPDATE query
     const query = `
     DELETE DATA { 
-      <https://fvspeybr.inrupt.net/profile/card#me> <${state.foaf}based_near>  ?o . 
+      <https://thdossch.solid.community/profile/card#me> <${state.foaf}based_near>  ?o . 
        ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     } 
     INSERT DATA{
-      <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+      <${escape("https://thdossch.solid.community/profile/card#me")}> a <${state.foaf}Person>;
            <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
@@ -72,13 +72,13 @@ export const actions = {
            ].
     }
     WHERE {  
-      <https://fvspeybr.inrupt.net/profile/card#me> <${state.foaf}based_near>  ?o . 
+      <https://thdossch.solid.community/profile/card#me> <${state.foaf}based_near>  ?o . 
       ?o a <${state.geo}Point>; <${state.geo}lat> ?x;  <${state.geo}long> ?y;
     };
     `
 
   // Send a PATCH request to update the source
-  let response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
+  let response = await auth.fetch("https://thdossch.solid.community/public/location.ttl", {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
@@ -89,7 +89,7 @@ export const actions = {
   if (response.status == 409) {
     const query = `
     INSERT DATA{
-      <${escape("https://fvspeybr.inrupt.net/profile/card#me")}> a <${state.foaf}Person>;
+      <${escape("https://thdossch.solid.community/profile/card#me")}> a <${state.foaf}Person>;
            <${state.foaf}based_near> [
            a <${state.geo}Point>;
           <${state.geo}lat>      ${state.currentLocation.coords.latitude};
@@ -98,7 +98,7 @@ export const actions = {
     }
     `
   // Send a PATCH request to update the source
-  response = await auth.fetch("https://fvspeybr.inrupt.net/public/location2.ttl", {
+  response = await auth.fetch("https://thdossch.solid.community/public/location.ttl", {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/sparql-update' },
     body: query,
