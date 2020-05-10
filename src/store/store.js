@@ -72,7 +72,6 @@ export default new Vuex.Store({
 			//verkrijg publicTypeIndex			
 			let person = data[webId]
 			let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
-			
 			//stel baseIRI in zodat juist absolute pad van location.ttl gegeven wordt
 			const parser = new N3.Parser({baseIRI: webId});
 			
@@ -92,7 +91,7 @@ export default new Vuex.Store({
 			//maak locationfile of sla op	
 			let locationFile = ""
 			if (locationFileQuad.length == 0){
-				locationFile = await createLocationFile();
+				locationFile = await createLocationFile(webId);
 			}else{
 				locationFile = locationFileQuad[0].object.id
 				
@@ -101,8 +100,8 @@ export default new Vuex.Store({
 //				let acl = await aclApi.loadFromFileUrl(locationFile)
 //				acl.addRule(READ, "https://fvspeybr.inrupt.net/profile/card#me")
 //				await acl.saveToPod()
-
 			}
+			console.log(locationFile)
 			commit("SET_LOCATION_FILE", locationFile)
 		}
 	},
@@ -111,15 +110,42 @@ export default new Vuex.Store({
 	},
 });
 
-async function createLocationFile(){
+async function createLocationFile(webId){
 	console.log("CREATING_LOCATIONFILE")
-	//TODO: maak file aan + stel .acl juist in! (dus niemand mag lezen behalve de owner) + update de public index registry
-	let url = "https://thdossch.solid.community/public/"
-	let awns = await fc.createFile(url + "location.ttl", "", "text/turtle")
-	console.log(awns)
 	
+	//verkrijg publicTypeIndex			
+	const person = data[webId]
+	const registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
+	//verkrijg podroot
+	const podRoot = webId.replace(/\/profile.*/, '/')
+	
+	fc.createFile(podRoot + "public/location.ttl", "", "text/turtle")
+		.then(() => {
+			const query = `
+			INSERT DATA{
+				@prefix solid: <http://www.w3.org/ns/solid/terms#>.
+				@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+				<findmyfriendslocation> a solid:TypeRegistration;
+					solid:forClass wgs:Point;
+					solid:instance </public/location.ttl>.	
+			}
+			`
+			// Send a PATCH request to update the source
+			auth.fetch(registry, {
+				method: 'PATCH',
+				headers: { 'Content-Type': 'application/sparql-update' },
+				body: query,
+				credentials: 'include',
+			})
+				.catch(error => {
+				console.log("Failed to update publicTypeIndex")
+				console.log(error)	
+				})
+		})
+		.catch(error => console.log(error))
 	console.log("CREATING_LOCATIONFILE DONE")
-	return (url + "location.ttl") 
+			
+	return podRoot + 'public/location.ttl'
 }
 
 
