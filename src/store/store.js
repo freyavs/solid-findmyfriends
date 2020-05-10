@@ -112,7 +112,6 @@ export default new Vuex.Store({
 					console.log("Failed to create location file")
 					console.log(error)
 				})
-		}
     },
     requestLocation( { state } , friendWebId){
         console.log("requesting location of " + friendWebId )
@@ -141,6 +140,7 @@ export default new Vuex.Store({
           sn.send(friendWebId, payload, options)   
         })
     },
+	},
 	modules: {
 		location,
 		friends

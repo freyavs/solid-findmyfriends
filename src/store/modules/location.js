@@ -41,7 +41,7 @@ export const actions = {
 		}
 		navigator.geolocation.getCurrentPosition(position => {
 			commit('SET_LOCATION', position)
-			tools.updateLocation(rootState.webId, state.locationFile, state.currentLocation)
+			tools.updateLocation(rootState.webId, rootState.locationFile, state.currentLocation)
 		}, err => console.log(err.message))
 	}
 }

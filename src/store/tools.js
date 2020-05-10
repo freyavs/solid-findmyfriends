@@ -52,7 +52,6 @@ module.exports = {
 				?o a <${geo}Point>; <${geo}lat> ?x;  <${geo}long> ?y;
 			};
 		`
-
 		// Send a PATCH request to update the source
 		let response = await auth.fetch(locationFile, {
 			method: 'PATCH',
@@ -60,7 +59,6 @@ module.exports = {
 			body: query,
 			credentials: 'include',
 		});
-
 		//query failed, so this means for our app that the user / user location is not in the location file, send sparql query update to just insert data
 		if (response.status == 409) {
 			const query = `
