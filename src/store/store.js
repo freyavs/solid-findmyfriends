@@ -27,6 +27,7 @@ export default new Vuex.Store({
 		loggedIn: false,
 		webId: "",
 		locationFile: "",
+    friendsView: true
 	},
 	mutations: {
 		LOGIN(state, webId) {

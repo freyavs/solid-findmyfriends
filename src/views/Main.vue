@@ -32,6 +32,20 @@ export default {
     "me";
 }
 
+button {
+	border-radius: 8px;
+	border: none;
+	width: wrap;
+	height: 30px;
+	margin: 10px 10px 10px 5px;
+}
+
+.scrollable {
+	height: 100%;
+  -webkit-overflow-scrolling: touch;
+	overflow-y: auto;
+}
+
 .map {
   grid-area: map;
 }
