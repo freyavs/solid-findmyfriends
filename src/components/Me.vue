@@ -15,6 +15,7 @@
 </template>
 
 <script>
+//TODO: knop juistttt
 import { mapState } from "vuex"
 import ToggleButton from '@/components/ToggleButton.vue'
 import Name from '@/components/solid/Name.vue'
