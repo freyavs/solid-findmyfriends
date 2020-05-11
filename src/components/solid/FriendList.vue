@@ -1,11 +1,13 @@
 <template>
 	<div>
-		<div class="addfriendcontainer">
-			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
-			<button v-on:click="addFriend">Add</button>
-		</div>
-		<div class="scrollable">
-			<FriendCard v-for="friend in friends" :key="friend.webId.toString()" :friendId="friend.webId"/> 
+		<div v-if="friendsView">
+			<div class="addfriendcontainer">
+				<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
+				<button v-on:click="addFriend">Add</button>
+			</div>
+			<div class="scrollable">
+				<FriendCard v-for="friend in friends" :key="friend.webId.toString()" :friendId="friend.webId"/> 
+			</div>
 		</div>
 	</div>
 </template>
@@ -19,7 +21,8 @@ export default {
 		FriendCard
 	},
 	computed: mapState({
-		friends: state => state.friends.friends
+		friends: state => state.friends.friends,
+		friendsView: state => state.friendsView
 	}),
 	data() {
 		return {

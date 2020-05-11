@@ -53,7 +53,7 @@ export default new Vuex.Store({
 		logout({ commit }) {
 			commit("LOGOUT");
 		},
-		seeFriends({ commit }) {
+		switchFriendsView({ commit }) {
 			commit("SWITCH_FRIENDS_VIEW")
 		},
 		async setLocationFile({state, commit, dispatch}, webId) {

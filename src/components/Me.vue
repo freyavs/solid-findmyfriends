@@ -7,10 +7,6 @@
 				<Name :src="webId"/>
 				<ToggleButton/>
 				<button v-on:click="changeView">{{ viewSwitchButtonText }}</button>
-				<div  v-on:click="changeView">
-					<button v-if="friendsView">requests</button>
-					<button v-else>friends</button>
-				</div>
 			</div>
   </div>
 </template>
@@ -40,7 +36,7 @@ export default {
 	},
   methods: {
 		changeView(){
-			this.$store.dispatch('seeFriends')
+			this.$store.dispatch('switchFriendsView')
 		}
 	}
 };
