@@ -29,15 +29,10 @@ export default {
   },
   computed: mapState(["webId", "loggedIn", "friendsView"]),
   methods: {
-	changeView(){
-		if (!this.friendsView){
-			this.$store.dispatch('seeRequests')
-		}
-		else {
+		changeView(){
 			this.$store.dispatch('seeFriends')
 		}
 	}
-  }
 };
 </script>
 
