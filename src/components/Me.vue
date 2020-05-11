@@ -6,6 +6,7 @@
 			<div class="container" v-if="loggedIn">
 				<Name :src="webId"/>
 				<ToggleButton/>
+				<button v-on:click="changeView">{{ viewSwitchButtonText }}</button>
 				<div  v-on:click="changeView">
 					<button v-if="friendsView">requests</button>
 					<button v-else>friends</button>
@@ -27,7 +28,16 @@ export default {
     Name,
     ProfileImage
   },
-  computed: mapState(["webId", "loggedIn", "friendsView"]),
+	computed: {
+		viewSwitchButtonText(){
+			if (this.friendsView) {
+				return "requests"
+			} else {
+				return "friends"
+			}
+		},
+		...mapState(["webId", "loggedIn", "friendsView"])
+	},
   methods: {
 		changeView(){
 			this.$store.dispatch('seeFriends')
