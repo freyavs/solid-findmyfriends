@@ -22,16 +22,23 @@ const foaf = "http://xmlns.com/foaf/0.1/"
 //				await acl.saveToPod()
 
 export const state = {
-	friends: []	
+	friends: [],
+	friendsView: true
 }
 
 export const mutations = {
 	ADD_FRIEND(state, friendWebId) {
 		Vue.set(state.friends, state.friends.length, {webId: friendWebId, sharing: false})
-	}
+	},
+	SWITCH_FRIENDS_VIEW(state) {
+		state.friendsView = !state.friendsView
+	},
 }
 
 export const actions = {
+	switchFriendsView({ commit }) {
+		commit("SWITCH_FRIENDS_VIEW")
+	},
 	async addFriend({ rootState, commit }, friendWebId){
 		if (tools.escape(friendWebId) === ""){
 			return false

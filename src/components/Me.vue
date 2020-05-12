@@ -6,10 +6,7 @@
 			<div class="container" v-if="loggedIn">
 				<Name :src="webId"/>
 				<ToggleButton/>
-				<div  v-on:click="changeView">
-					<button v-if="friendsView">requests</button>
-					<button v-else>friends</button>
-				</div>
+				<button v-on:click="changeView">{{ viewSwitchButtonText }}</button>
 			</div>
   </div>
 </template>
@@ -26,17 +23,24 @@ export default {
     Name,
     ProfileImage
   },
-  computed: mapState(["webId", "loggedIn", "friendsView"]),
+	computed: {
+		viewSwitchButtonText(){
+			if (this.friendsView) {
+				return "requests"
+			} else {
+				return "friends"
+			}
+		},
+		...mapState({
+			webId: state => state.webId,
+			loggedIn: state => state.loggedIn,
+			friendsView: state => state.friends.friendsView})
+	},
   methods: {
-	changeView(){
-		if (!this.friendsView){
-			this.$store.dispatch('seeRequests')
-		}
-		else {
-			this.$store.dispatch('seeFriends')
+		changeView(){
+			this.$store.dispatch('switchFriendsView')
 		}
 	}
-  }
 };
 </script>
 
