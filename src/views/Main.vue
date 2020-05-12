@@ -6,8 +6,8 @@
 			<div class="anim" v-if="friendsView" key="1">
         <FriendList/>
 			</div>
-			<div v-else key="2">
-				<h1>Hey</h1>
+      <div v-else key="2">
+        <RequestsLDN/>
 			</div>
 		</transition>
 	</div>
@@ -20,10 +20,11 @@ import { mapState } from "vuex";
 import Me from '@/components/Me.vue'
 import FriendList from '@/components/solid/FriendList.vue'
 import Map from '@/components/Map.vue'
+import RequestsLDN from '@/components/RequestsLDN.vue'
 
 export default {
 	components: {
-		Me, FriendList, Map	
+		Me, FriendList, Map	, RequestsLDN
   },
   computed:  mapState({
       friendsView: state => state.friends.friendsView,

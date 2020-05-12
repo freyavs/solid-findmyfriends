@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as location from '@/store/modules/location.js'
 import * as friends from '@/store/modules/friends.js'
+import * as requests from '@/store/modules/requests.js'
 
 Vue.use(Vuex);
 
@@ -12,15 +13,6 @@ const fc	 = new FC( auth )
 const {default: data} = require('@solid/query-ldflex')
 
 const N3 = require('n3');
-
-
-var rdf = require('rdflib')
-var sn = require('@/lib/solid-notifs.js')
-
-var webClient = require('solid-web-client')(rdf)
-var options = {
-  "webClient" : webClient
-}
 
 export default new Vuex.Store({
 	state: {
@@ -45,6 +37,7 @@ export default new Vuex.Store({
 		login({ commit, dispatch }, webId) {
 			commit("LOGIN", webId)
 			dispatch("fetchFriends")
+			dispatch("fetchRequests")
 		},
 		logout({ commit }) {
 			commit("LOGOUT");
@@ -112,37 +105,11 @@ export default new Vuex.Store({
 					console.log("Failed to create location file")
 					console.log(error)
 				})
-    },
-    requestLocation( { state } , friendWebId){
-        console.log("requesting location of " + friendWebId )
-        
-        sn.discoverInboxUri(friendWebId, options.webClient).then( inbox => {
-          console.log(inbox)
-
-          options.inboxUri = inbox
-
-          /* test:
-          let opts = {
-            headers: { 'Accept': 'application/ld+json;q=0.9,text/turtle;q=0.8' }
-          }
-           webClient.get(inbox, opts).then(x => {console.log(x)})
-          
-          sn.list(friendWebId, options).then(contains => {
-            console.log(contains);
-          })*/
-        
-          var payload = {
-            "@context": "https://www.w3.org/ns/activitystreams",
-            "@id": "",
-            "type": "FindMyFriendsRequest",
-            "from": state.webId
-          }
-          sn.send(friendWebId, payload, options)   
-        })
-    },
+    }
 	},
 	modules: {
 		location,
-		friends
+		friends, 
+		requests
 	},
 });
