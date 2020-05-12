@@ -27,7 +27,7 @@ export default {
 	},
 	computed: mapState({
 		friends: state => state.friends.friends,
-		friendsView: state => state.friendsView
+		friendsView: state => state.friends.friendsView
 	}),
 	data() {
 		return {

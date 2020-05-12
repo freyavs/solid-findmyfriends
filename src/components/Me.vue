@@ -12,7 +12,6 @@
 </template>
 
 <script>
-//TODO: knop juistttt
 import { mapState } from "vuex"
 import ToggleButton from '@/components/ToggleButton.vue'
 import Name from '@/components/solid/Name.vue'
@@ -32,7 +31,10 @@ export default {
 				return "friends"
 			}
 		},
-		...mapState(["webId", "loggedIn", "friendsView"])
+		...mapState({
+			webId: state => state.webId,
+			loggedIn: state => state.loggedIn,
+			friendsView: state => state.friends.friendsView})
 	},
   methods: {
 		changeView(){

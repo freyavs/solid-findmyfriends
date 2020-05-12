@@ -27,7 +27,6 @@ export default new Vuex.Store({
 		loggedIn: false,
 		webId: "",
 		locationFile: "",
-    friendsView: true
 	},
 	mutations: {
 		LOGIN(state, webId) {
@@ -41,9 +40,6 @@ export default new Vuex.Store({
 		SET_LOCATION_FILE(state, file){
 			state.locationFile = file;
 		},
-		SWITCH_FRIENDS_VIEW(state) {
-			state.friendsView = !state.friendsView
-		},
 	},
 	actions: {
 		login({ commit, dispatch }, webId) {
@@ -52,9 +48,6 @@ export default new Vuex.Store({
 		},
 		logout({ commit }) {
 			commit("LOGOUT");
-		},
-		switchFriendsView({ commit }) {
-			commit("SWITCH_FRIENDS_VIEW")
 		},
 		async setLocationFile({state, commit, dispatch}, webId) {
 			//verkrijg publicTypeIndex			
