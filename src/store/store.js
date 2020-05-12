@@ -13,6 +13,10 @@ const {default: data} = require('@solid/query-ldflex')
 
 const N3 = require('n3');
 
+const SolidAclUtils = require('solid-acl-utils')
+const { AclApi, Agents } = SolidAclUtils
+const Permissions = SolidAclUtils.Permissions
+const READ = Permissions.READ
 
 var rdf = require('rdflib')
 var sn = require('@/lib/solid-notifs.js')
@@ -102,7 +106,20 @@ export default new Vuex.Store({
 						body: query,
 						credentials: 'include',
 					})
-						.then(() => commit("SET_LOCATION_FILE", podRoot + "public/location.ttl"))
+						.then(() => {
+							commit("SET_LOCATION_FILE", podRoot + "public/location.ttl")
+							
+							const fetch = auth.fetch.bind(auth)
+							const aclApi = new AclApi(fetch, { autoSave: true })
+							aclApi.loadFromFileUrl(state.locationFile)
+								.then( acl => {
+									acl.deleteRule(READ, Agents.PUBLIC)
+								})
+								.catch(error => {
+									console.log("Failed to remove Public Agent Read permissions")
+									console.log(error)
+								})
+						})
 						.catch(error => {
 						console.log("Failed to update publicTypeIndex")
 						console.log(error)	

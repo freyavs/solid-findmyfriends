@@ -6,20 +6,13 @@ const {default: data} = require('@solid/query-ldflex')
 
 const foaf = "http://xmlns.com/foaf/0.1/"
 
-//const SolidAclUtils = require('solid-acl-utils')
 //const { AclApi, AclDoc, AclParser, AclRule, Permissions, Agents } = SolidAclUtils
 //const { READ, WRITE, APPEND, CONTROL } = Permissions
+//const SolidAclUtils = require('solid-acl-utils')
 //const AclApi = SolidAclUtils.AclApi
 //const Permissions = SolidAclUtils.Permissions
 //const READ = Permissions.READ
-//const CONTROL = Permissions.CONTROL
 
-
-//				const fetch = auth.fetch.bind(auth)
-//				const aclApi = new AclApi(fetch, { autoSave: false })
-//				let acl = await aclApi.loadFromFileUrl(locationFile)
-//				acl.addRule(READ, "https://fvspeybr.inrupt.net/profile/card#me")
-//				await acl.saveToPod()
 
 export const state = {
 	friends: [],
