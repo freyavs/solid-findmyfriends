@@ -1,7 +1,16 @@
 <template>
   <div class="site">
     <Map class="map"></Map>
-    <FriendList class="friendslist"></FriendList>
+    <div class="friendslist">
+		<transition name="switch" mode="out-in">
+			<div class="anim" v-if="friendsView" key="1">
+        <FriendList/>
+			</div>
+			<div v-else key="2">
+				<h1>Hey</h1>
+			</div>
+		</transition>
+	</div>
     <Me class="me"></Me>
   </div>
 </template>
@@ -16,7 +25,10 @@ export default {
 	components: {
 		Me, FriendList, Map	
   },
-  computed: mapState(['webId'])
+  computed:  mapState({
+      friendsView: state => state.friends.friendsView,
+      webId: state => state.webId
+  })
 }
 </script>
 
@@ -61,6 +73,17 @@ button {
 	
 	display: flex;
 	align-items: center;
+}
+
+.switch-enter, .switch-leave-to {
+	opacity: 0;
+	transform: translateX(-100px);
+}
+.switch-enter-active, .switch-leave-active {
+	transition: all 0.6s ;
+}
+.anim{
+	height: 100%;
 }
 
 @media screen and (min-width: 950px) {
