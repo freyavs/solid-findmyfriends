@@ -15,13 +15,21 @@ export const state = {
 }
 
 export const mutations = {
+    SET_REQUESTS(state, requests){
+        state.requests = requests
+    }
 }
 
 export const actions = {
     fetchRequests({rootState}){
+        let requests = []
         sn.list(rootState.webId, options).then(contains => {
             for (let message of contains){
-                fc.readFile(message).then( m => console.log(m))
+                fc.readFile(message).then( m => {
+                    console.log(m['@id']);
+                    requests.push(m.from)
+                })
+
             }
         })
     },

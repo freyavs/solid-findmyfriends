@@ -1,18 +1,23 @@
 <template>
 	<div>
 		<div class="scrollable">
-			<h3>halla</h3>
+			<h3>Share your location with: </h3>
+            <RequestCard v-for="req in requests" :key="req" :requesterId="req"/> 
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import RequestCard from '@/components/RequestCard.vue'
 
 export default {
+    components: {
+        RequestCard
+    },
 	computed: mapState({
 		friends: state => state.friends.friends,
-		requests: state => state.requests.friendsView
+		requests: state => state.requests.requests
 	}),
 	methods: {
 		async addFriend(){
