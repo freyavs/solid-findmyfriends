@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as location from '@/store/modules/location.js'
 import * as friends from '@/store/modules/friends.js'
+import tools from '../lib/tools'
 import * as requests from '@/store/modules/requests.js'
 
 Vue.use(Vuex);
@@ -42,32 +43,10 @@ export default new Vuex.Store({
 		logout({ commit }) {
 			commit("LOGOUT");
 		},
-		async setLocationFile({state, commit, dispatch}, webId) {
-			//verkrijg publicTypeIndex			
-			let person = data[state.webId]
-			let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
-			//stel baseIRI in zodat juist absolute pad van location.ttl gegeven wordt
-			const parser = new N3.Parser({baseIRI: webId});
-			
-			//parse registry 
-			let registerContent = await fc.readFile(registry)
-			const quads =	parser.parse(registerContent)
-			//maak store en steek de geparste quads er in
-			const store = new N3.Store()
-			store.addQuads(quads)
-			//namedNodes om te zoeken in onze store naar juiste dingen	
-			const geoPoint = N3.DataFactory.namedNode("http://www.w3.org/2003/01/geo/wgs84_pos#Point")
-			const instance = N3.DataFactory.namedNode("http://www.w3.org/ns/solid/terms#instance")
-			//zoek in store naar de locationfile	
-			const geoPointQuads = store.getQuads(null, null, geoPoint)
-			const locationFileQuad = store.getQuads(geoPointQuads.subject, instance)
-
-			//store de locationfile of maak een aan
-			if (locationFileQuad.length == 0){
-				dispatch("createLocationFile")
-			}else{
-				commit("SET_LOCATION_FILE", locationFileQuad[0].object.id)
-			}
+		async setLocationFile({state, commit, dispatch}) {
+			const locationFile = await tools.setLocationFile(state.webId)
+			commit("SET_LOCATION_FILE", locationFile)
+			dispatch("fetchFriendsPermissions")
 		},
 		async createLocationFile({state, commit}){
 			//verkrijg publicTypeIndex			

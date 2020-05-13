@@ -2,7 +2,7 @@
 	<div class="card">
 		<ProfileImage :src="friendId"/>
 		<Name :src="friendId"/>
-		<button v-on:click="switchStatus">{{ action }}</button>
+		<button v-on:click="switchPermissionStatus">{{ action }}</button>
 		<button v-on:click="requestLocation">request location</button>
 	</div>
 </template>
@@ -10,6 +10,10 @@
 <script>
 import Name from '@/components/solid/Name.vue';
 import ProfileImage from '@/components/solid/ProfileImage.vue';
+import permissions from '../lib/solid-permissions.js'
+
+import { mapState } from 'vuex'
+
 
 export default {
 	props: ['friendId'],
@@ -29,16 +33,24 @@ export default {
 			}else{
 				return "share"
 			}
-		}
+		},
+		...mapState(["locationFile"])
 	},
 	methods: {
-		switchStatus(){
+		switchPermissionStatus(){
+			if (!this.sharing){
+				console.log("give perimission to: " + this.friendId)
+				permissions.givePermission(this.locationFile, this.friendId)
+			} else {
+				console.log("revoke perimission to: " + this.friendId)
+				permissions.revokePermission(this.locationFile, this.friendId)
+			}
 			this.sharing = !this.sharing
 		},
 		requestLocation(){
 			this.$store.dispatch('requestLocation', this.friendId)
 		}
-	}
+	},
 }
 </script>
 
