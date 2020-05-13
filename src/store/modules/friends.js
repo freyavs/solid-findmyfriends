@@ -1,18 +1,10 @@
 import Vue from 'vue'
-import tools from '../tools'
+import tools from '../../lib/tools'
 
 const auth = require('solid-auth-client')
 const {default: data} = require('@solid/query-ldflex')
 
 const foaf = "http://xmlns.com/foaf/0.1/"
-
-//const { AclApi, AclDoc, AclParser, AclRule, Permissions, Agents } = SolidAclUtils
-//const { READ, WRITE, APPEND, CONTROL } = Permissions
-//const SolidAclUtils = require('solid-acl-utils')
-//const AclApi = SolidAclUtils.AclApi
-//const Permissions = SolidAclUtils.Permissions
-//const READ = Permissions.READ
-
 
 export const state = {
 	friends: [],
@@ -60,5 +52,8 @@ export const actions = {
 		for await (const webid of person.friends) {
 			commit("ADD_FRIEND", webid)
 		}
+	},
+	async fetchFriendsPermissions(){
+		console.log('fetch perm')
 	}
 }
