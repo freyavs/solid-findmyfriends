@@ -11,6 +11,9 @@ const N3 = require('n3');
 const foaf = "http://xmlns.com/foaf/0.1/"
 const geo  = "http://www.w3.org/2003/01/geo/wgs84_pos#"
 
+const geoPoint = N3.DataFactory.namedNode(geo + "Point")
+const instance = N3.DataFactory.namedNode("http://www.w3.org/ns/solid/terms#instance")
+
 module.exports = {
 	escape (iri) {
 		if (!iri || !/^\w+:[^<> ]+$/.test(iri))
@@ -42,6 +45,9 @@ module.exports = {
 	},
 
 	async updateLocation(webId, locationFile, currentLocation) {
+		console.log("updating location file: " + locationFile)
+		//todo: weg
+		this.getLocationFromFile(webId, locationFile)
 		// Create the SPARQL UPDATE query
 		const query = `
 			DELETE DATA { 
@@ -91,6 +97,13 @@ module.exports = {
 		return response.status === 200;
 	},
 	async setLocationFile(webId) {
+		let file = await this.getLocationFile(webId)
+		if (!file){
+			return this.createLocationFile(webId)
+		}
+		return file
+	},
+	async getLocationFile(webId){
 		//verkrijg publicTypeIndex			
 		let person = data[webId]
 		let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
@@ -103,16 +116,14 @@ module.exports = {
 		//maak store en steek de geparste quads er in
 		const store = new N3.Store()
 		store.addQuads(quads)
-		//namedNodes om te zoeken in onze store naar juiste dingen	
-		const geoPoint = N3.DataFactory.namedNode("http://www.w3.org/2003/01/geo/wgs84_pos#Point")
-		const instance = N3.DataFactory.namedNode("http://www.w3.org/ns/solid/terms#instance")
+		
 		//zoek in store naar de locationfile	
 		const geoPointQuads = store.getQuads(null, null, geoPoint)
 		const locationFileQuad = store.getQuads(geoPointQuads.subject, instance)
 
 		//store de locationfile of maak een aan
 		if (locationFileQuad.length == 0){
-			return this.createLocationFile(webId)
+			return null
 		}else{
 			return locationFileQuad[0].object.id
 		}
@@ -161,4 +172,17 @@ module.exports = {
 		const file = await Promise.resolve(make)
 		return file
 	},
+	async getLocationFromFile(webId, locationFile){
+		console.log("getting location from file")
+		//parse location file
+		let locationContent = await fc.readFile(locationFile)
+		const parser = new N3.Parser({baseIRI: webId});
+		const quads = parser.parse(locationContent)
+		//maak store en steek de geparste quads er in
+		const store = new N3.Store()
+		store.addQuads(quads)
+		//namedNodes om te zoeken in onze store naar juiste dingen	
+		//const geoPoint = N3.DataFactory.namedNode("http://www.w3.org/2003/01/geo/wgs84_pos#Point")
+		console.log(quads)
+	}
 }

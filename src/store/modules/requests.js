@@ -52,7 +52,7 @@ export const actions = {
                         else {
                             requests.push({ requester: requester, message: message})
                         }
-                        //console.log(`${quad.subject.value} - ${quad.predicate.value} - ${quad.object.value}`)
+                        console.log(quad)
                     })
                 })
 
@@ -62,10 +62,9 @@ export const actions = {
     },
     requestLocation( { rootState} ,friendWebId){
           let payload = `{
-            "@context": "https://www.w3.org/ns/activitystreams",
-            "@id": "${rootState.webId}",
-            "type": "FindMyFriendsRequest",
-            "from": "${rootState.webId}" }`
+            "@context": "http://schema.org/",
+            "@name": "FindMyFriendsRequest",
+            "@agent": "${rootState.webId}" }`
           sn.send(friendWebId.toString(), payload, options) 
     },
     handleRequest({ commit, state, rootState }, request){
