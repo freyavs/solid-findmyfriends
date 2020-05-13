@@ -10,18 +10,10 @@
 <script>
 import Name from '@/components/solid/Name.vue';
 import ProfileImage from '@/components/solid/ProfileImage.vue';
+import permissions from '../lib/solid-permissions.js'
 
 import { mapState } from 'vuex'
 
-const auth = require('solid-auth-client')
-
-const SolidAclUtils = require('solid-acl-utils')
-const AclApi = SolidAclUtils.AclApi
-const Permissions = SolidAclUtils.Permissions
-const READ = Permissions.READ
-				
-const fetch = auth.fetch.bind(auth)
-const aclApi = new AclApi(fetch, { autoSave: true })
 
 export default {
 	props: ['friendId'],
@@ -48,25 +40,17 @@ export default {
 		switchPermissionStatus(){
 			if (!this.sharing){
 				console.log("give perimission to: " + this.friendId)
-				this.givePermission()
+				permissions.givePermission(this.locationFile, this.friendId)
 			} else {
 				console.log("revoke perimission to: " + this.friendId)
-				this.revokePermission()
+				permissions.revokePermission(this.locationFile, this.friendId)
 			}
 			this.sharing = !this.sharing
-		},
-		async givePermission(){
-			let acl = await aclApi.loadFromFileUrl(this.locationFile)
-			acl.addRule(READ, this.friendId.toString())
-		},
-		async revokePermission(){
-			let acl = await aclApi.loadFromFileUrl(this.locationFile)
-			acl.deleteRule(READ, this.friendId.toString())
 		},
 		requestLocation(){
 			this.$store.dispatch('requestLocation', this.friendId)
 		}
-	}
+	},
 }
 </script>
 

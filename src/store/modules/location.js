@@ -1,4 +1,4 @@
-import tools from '../tools'
+import tools from '../../lib/tools'
 
 export const state = {
     sharingLocation: false,
