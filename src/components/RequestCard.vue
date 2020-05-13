@@ -31,7 +31,6 @@ export default {
 <style scoped>
 .card {
 	height: 80px;
-
 	display: flex;
 	align-items: center;
 }

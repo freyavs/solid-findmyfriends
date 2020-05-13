@@ -1,7 +1,10 @@
 <template>
 	<div>
-		<div class="scrollable">
+		<div class="refreshcontainer">
+			<button v-on:click="refresh" >refresh</button>
 			<h3>Share your location with: </h3>
+		</div>
+		<div class="scrollable">
             <RequestCard v-for="req in requests" :key="req.message" :request="req"/> 
 		</div>
 	</div>
@@ -19,6 +22,9 @@ export default {
 		requests: state => state.requests.requests
 	}),
 	methods: {
+		refresh(){
+			this.$store.dispatch('fetchRequests')
+		}
 	}
 }
 </script>
@@ -35,6 +41,11 @@ button {
 	height: 100%;
   -webkit-overflow-scrolling: touch;
 	overflow-y: auto;
+}
+
+.refreshcontainer {
+	display: flex;
+	align-items: center;
 }
 
 </style>
