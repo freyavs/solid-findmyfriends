@@ -1,6 +1,7 @@
 
 const rdf = require('rdflib')
 const sn = require('@/lib/solid-notifs.js')
+const perm = require('@/lib/solid-permissions.js')
 
 const auth = require('solid-auth-client')
 const FC	 = require('solid-file-client')
@@ -67,11 +68,11 @@ export const actions = {
             "from": "${rootState.webId}" }`
           sn.send(friendWebId.toString(), payload, options) 
     },
-    handleRequest({ commit, state }, request){
+    handleRequest({ commit, state, rootState }, request){
         fc.delete(request.message)
         let requests = state.requests.filter(req => req.requester !== request.requester)
         if (request.accepted){
-            //todo
+            perm.givePermission(rootState.locationFile, request.requester)
         }
         commit('SET_REQUESTS', requests)
     }
