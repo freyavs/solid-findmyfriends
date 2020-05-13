@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="anim">
 		<div class="addfriendcontainer">
 			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
 			<button v-on:click="addFriend">Add</button>
@@ -68,5 +68,4 @@ input{
 	display: flex;
 	align-items: center;
 }
-
 </style>

@@ -17,10 +17,10 @@ import { mapState } from 'vuex'
 
 export default {
 	props: ['friendId'],
-  components: {
-    Name,
-    ProfileImage
-  },
+	components: {
+		Name,
+		ProfileImage
+	},
 	data() {
 		return {
 			sharing: false
@@ -31,10 +31,13 @@ export default {
 			if(this.sharing){
 				return "block"
 			}else{
-				return "share"
+				return "allow"
 			}
 		},
-		...mapState(["locationFile"])
+		...mapState({
+			locationFile: state => state.locationFile,
+			friends: state => state.friends.friends
+		})
 	},
 	methods: {
 		switchPermissionStatus(){
@@ -51,6 +54,19 @@ export default {
 			this.$store.dispatch('requestLocation', this.friendId)
 		}
 	},
+	watch: {
+		friends: function() {
+			console.log("watch")
+			this.friends.forEach(friend => {
+				if (friend.webId.toString() === this.friendId.toString()) {
+					console.log(friend.webId.toString())
+					console.log(friend)
+					console.log(friend.sharing)
+					this.sharing = friend.sharing
+				}
+			})
+		}
+	}
 }
 </script>
 
