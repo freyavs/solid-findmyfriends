@@ -1,19 +1,12 @@
 <template>
 	<div>
-		<transition name="switch" mode="out-in">
-			<div class="anim" v-if="friendsView" key="1">
-				<div class="addfriendcontainer">
-					<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
-					<button v-on:click="addFriend">Add</button>
-				</div>
-				<div class="scrollable">
-					<FriendCard v-for="friend in friends" :key="friend.webId.toString()" :friendId="friend.webId"/> 
-				</div>
-			</div>
-			<div v-else key="2">
-				<h1>Hey</h1>
-			</div>
-		</transition>
+		<div class="addfriendcontainer">
+			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
+			<button v-on:click="addFriend">Add</button>
+		</div>
+		<div class="scrollable">
+			<FriendCard v-for="friend in friends" :key="friend.webId.toString()" :friendId="friend.webId"/> 
+		</div>
 	</div>
 </template>
 
@@ -50,10 +43,6 @@ export default {
 </script>
 
 <style scoped>
-.addfriendcontainer {
-	display: flex;
-	align-items: center;
-}
 button {
 	border-radius: 8px;
 	border: none;
@@ -74,14 +63,10 @@ input{
   -webkit-overflow-scrolling: touch;
 	overflow-y: auto;
 }
-.switch-enter, .switch-leave-to {
-	opacity: 0;
-	transform: translateX(-100px);
+
+.addfriendcontainer {
+	display: flex;
+	align-items: center;
 }
-.switch-enter-active, .switch-leave-active {
-	transition: all 0.6s ;
-}
-.anim{
-	height: 100%;
-}
+
 </style>

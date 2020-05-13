@@ -3,16 +3,17 @@ import Vuex from "vuex";
 import * as location from '@/store/modules/location.js'
 import * as friends from '@/store/modules/friends.js'
 import tools from '../lib/tools'
+import * as requests from '@/store/modules/requests.js'
 
 Vue.use(Vuex);
 
-var rdf = require('rdflib')
-var sn = require('@/lib/solid-notifs.js')
+const auth = require('solid-auth-client')
+const FC	 = require('solid-file-client')
+const fc	 = new FC( auth )
 
-var webClient = require('solid-web-client')(rdf)
-var options = {
-  "webClient" : webClient
-}
+const {default: data} = require('@solid/query-ldflex')
+
+const N3 = require('n3');
 
 export default new Vuex.Store({
 	state: {
@@ -37,6 +38,7 @@ export default new Vuex.Store({
 		login({ commit, dispatch }, webId) {
 			commit("LOGIN", webId)
 			dispatch("fetchFriends")
+			dispatch("fetchRequests")
 		},
 		logout({ commit }) {
 			commit("LOGOUT");
@@ -46,36 +48,47 @@ export default new Vuex.Store({
 			commit("SET_LOCATION_FILE", locationFile)
 			dispatch("fetchFriendsPermissions")
 		},
-    requestLocation( { state } , friendWebId){
-        console.log("requesting location of " + friendWebId )
-        
-        sn.discoverInboxUri(friendWebId, options.webClient).then( inbox => {
-          console.log(inbox)
-
-          options.inboxUri = inbox
-
-          /* test:
-          let opts = {
-            headers: { 'Accept': 'application/ld+json;q=0.9,text/turtle;q=0.8' }
-          }
-           webClient.get(inbox, opts).then(x => {console.log(x)})
-          
-          sn.list(friendWebId, options).then(contains => {
-            console.log(contains);
-          })*/
-        
-          var payload = {
-            "@context": "https://www.w3.org/ns/activitystreams",
-            "@id": "",
-            "type": "FindMyFriendsRequest",
-            "from": state.webId
-          }
-          sn.send(friendWebId, payload, options)   
-        })
-    },
+		async createLocationFile({state, commit}){
+			//verkrijg publicTypeIndex			
+			const person = data[state.webId]
+			const registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
+			//verkrijg podroot
+			const podRoot = state.webId.replace(/\/profile.*/, '/')
+			
+			//maak locationfile aan
+			fc.createFile(podRoot + "public/location.ttl", "", "text/turtle")
+				.then(() => {
+					//update de publicTypeIndex met de nieuwe file
+					const query = `
+					INSERT DATA{
+						@prefix solid: <http://www.w3.org/ns/solid/terms#>.
+						@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+						<findmyfriendslocation> a solid:TypeRegistration;
+							solid:forClass wgs:Point;
+							solid:instance </public/location.ttl>.	
+					}
+					`
+					auth.fetch(registry, {
+						method: 'PATCH',
+						headers: { 'Content-Type': 'application/sparql-update' },
+						body: query,
+						credentials: 'include',
+					})
+						.then(() => commit("SET_LOCATION_FILE", podRoot + "public/location.ttl"))
+						.catch(error => {
+						console.log("Failed to update publicTypeIndex")
+						console.log(error)	
+						})
+				})
+				.catch(error => {
+					console.log("Failed to create location file")
+					console.log(error)
+				})
+    }
 	},
 	modules: {
 		location,
-		friends
+		friends, 
+		requests
 	},
 });
