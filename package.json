@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ldflex/rdflib": "^1.0.0",
+    "@rdfjs/parser-jsonld": "^1.2.1",
     "@solid/query-ldflex": "^2.10.1",
     "core-js": "^3.6.4",
     "leaflet": "^1.6.0",

@@ -1,8 +1,8 @@
 <template>
 	<div class="card">
-		<ProfileImage :src="friendId"/>
-		<Name :src="friendId"/>
-		<button v-on:click="acceptReqest">accept</button>
+		<ProfileImage :src="request.requester"/>
+		<Name :src="request.requester"/>
+		<button v-on:click="acceptRequest">accept</button>
 		<button v-on:click="removeRequest">deny</button>
 	</div>
 </template>
@@ -12,12 +12,18 @@ import Name from '@/components/solid/Name.vue';
 import ProfileImage from '@/components/solid/ProfileImage.vue';
 
 export default {
-	props: ['friendId'],
+	props: ['request'],
   components: {
     Name,
     ProfileImage
   },
 	methods: {
+		acceptRequest(){
+			this.$store.dispatch('handleRequest',{message: this.request.message, requester: this.request.requester, accepted: true})
+		},
+		removeRequest(){
+			this.$store.dispatch('handleRequest', {message: this.request.message, requester: this.request.requester, accepted: false})
+		}
 	}
 }
 </script>

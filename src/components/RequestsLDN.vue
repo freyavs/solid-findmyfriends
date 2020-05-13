@@ -2,7 +2,7 @@
 	<div>
 		<div class="scrollable">
 			<h3>Share your location with: </h3>
-            <RequestCard v-for="req in requests" :key="req" :requesterId="req"/> 
+            <RequestCard v-for="req in requests" :key="req.message" :request="req"/> 
 		</div>
 	</div>
 </template>
@@ -16,21 +16,10 @@ export default {
         RequestCard
     },
 	computed: mapState({
-		friends: state => state.friends.friends,
 		requests: state => state.requests.requests
 	}),
 	methods: {
-		async addFriend(){
-			let success = await this.$store.dispatch('addFriend', this.friendurl)
-			if (success){
-				console.log("Friend add succes")
-				this.friendurl = null 
-			}
-			else {
-				alert("Incorrect friend url, please try again.")
-			}
-		}
-	},
+	}
 }
 </script>
 
