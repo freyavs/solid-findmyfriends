@@ -196,7 +196,6 @@ module.exports = {
 
 						let long = parseFloat(longQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
 						let lat = parseFloat(latQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
-
 						return { lat: lat, long: long}
 					} else {
 						return null

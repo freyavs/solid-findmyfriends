@@ -27,13 +27,15 @@ let smallIcon = new L.Icon({
 export default {
 	computed: mapState({
 		currentLocation: state => state.location.currentLocation,
-		friends: state => state.friends.friends
+		friends: state => state.friends.friends,
+		webId: state => state.webId
 	}),
 	data() {
 		return {
 			map: null,
 			marker: null,
-			friendMarkers: []
+			friendMarkers: [],
+			name: null
 		};
 	},
 	watch: {
@@ -42,12 +44,21 @@ export default {
 				//remove eerst de marker en zet dan een nieuwe
 				if (this.marker){
 					this.map.removeLayer(this.marker)
+				}else{
+					this.map.flyTo(new L.LatLng(this.currentLocation.coords.latitude, this.currentLocation.coords.longitude))
+				}
+				if(this.name == null) {
+					this.getName()
 				}
 				this.marker = L.marker([
 						this.currentLocation.coords.latitude,
 						this.currentLocation.coords.longitude
 					], { icon: smallIcon }).addTo(this.map)
-        this.map.flyTo(new L.LatLng(this.currentLocation.coords.latitude, this.currentLocation.coords.longitude));
+				if(this.name != null){
+					this.marker
+						.bindPopup(this.name.toString())
+						.openPopup()
+				}
       }else{
 				this.map.removeLayer(this.marker)
 			}
@@ -57,40 +68,43 @@ export default {
 		async updateFriendLocations(){
 			let newMarkers = []
 			for (let friend of this.friends){
-				console.log("after name: " + friend.webId)
-				Promise.resolve(tools.getLocationFromFile(friend.webId, friend.locationFile)
+				let person = data[friend.webId]
+				const name = await person.name
+				let marker = await Promise.resolve(tools.getLocationFromFile(friend.webId, friend.locationFile)
 					.then( location => {
-						console.log(friend.locationFile, location)
-						if (location){
-							let person = data[friend.webId]
-							person.name.then(name => {
-								let marker = {
-									name: name,
-									latitude: location.lat,
-									longitude: location.long
-								}
-								newMarkers.push(marker)
-							})
+						if (location !== null){
+							let marker = {
+								name: name,
+								latitude: location.lat,
+								longitude: location.long
+							}
+							return marker
 						}
-					}))
+					})
+					.catch(error => error))
+				if(marker){
+					newMarkers.push(marker)
+				}
       }
-      //w
 			this.addFriendMarkers(newMarkers)
 		},
 		addFriendMarkers(newMarkers) {
 			this.friendMarkers.forEach(marker => this.map.removeLayer(marker))
 			newMarkers.forEach(marker => {
-				console.log(marker)
-				
-//				this.friendMarkers.push(marker)
-//				L.marker([
-//						marker.latitude,
-//						marker.longitude
-//					], { icon: smallIcon }).addTo(this.map)
-//					.bindPopup(marker.name)
-//					.openPopup()
+				this.friendMarkers.push(marker)
+				L.marker([
+						marker.latitude,
+						marker.longitude
+					], { icon: smallIcon }).addTo(this.map)
+					.bindPopup(marker.name.toString())
+					.openPopup()
 
 			})
+		},
+		async getName(){
+			let person = data[this.webId.toString()]
+			const name = await person.name
+			this.name = name
 		}
 	},
 	mounted() {
