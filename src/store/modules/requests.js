@@ -44,15 +44,20 @@ export const actions = {
                     const output = parserJsonld.import(input)
 
                     output.on('data', quad => {
-                        let requester = quad.subject.value.toString()
-                        if ( requests.filter(req => req.requester == requester).length > 0 ){
-                            //delete any double requests, use delete in stead of deleteFile so it doesn't try to delete non existing .acl and .meta files
-                            fc.delete(message)
+                        //TODO: beter
+                        if (quad.predicate.value.toString() === "https://www.w3.org/ns/activitystreams#actor"){
+                            let requester = quad.object.value.toString()
+                            if ( requests.filter(req => req.requester === requester).length > 0 ){
+                                //delete any double requests, use delete in stead of deleteFile so it doesn't try to delete non existing .acl and .meta files
+                                fc.delete(message)
+                                console.log("deleting duplicate message")
+                            }
+                            else {
+                                requests.push({ requester: requester, message: message})
+                                console.log("adding to requests")
+                            }
+                            console.log(quad)
                         }
-                        else {
-                            requests.push({ requester: requester, message: message})
-                        }
-                        console.log(quad)
                     })
                 })
 
@@ -62,9 +67,13 @@ export const actions = {
     },
     requestLocation( { rootState} ,friendWebId){
           let payload = `{
-            "@context": "http://schema.org/",
-            "@name": "FindMyFriendsRequest",
-            "@agent": "${rootState.webId}" }`
+            "@context": "https://www.w3.org/ns/activitystreams#",
+            "@id": "",
+            "summary": "FindMyFriendRequest",
+            "type": "Invite",
+            "actor": "${rootState.webId}"
+            }`
+
           sn.send(friendWebId.toString(), payload, options) 
     },
     handleRequest({ commit, state, rootState }, request){

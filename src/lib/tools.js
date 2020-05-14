@@ -181,8 +181,7 @@ module.exports = {
 		//maak store en steek de geparste quads er in
 		const store = new N3.Store()
 		store.addQuads(quads)
-		//namedNodes om te zoeken in onze store naar juiste dingen	
-		//const geoPoint = N3.DataFactory.namedNode("http://www.w3.org/2003/01/geo/wgs84_pos#Point")
+
 		console.log(quads)
 	}
 }
