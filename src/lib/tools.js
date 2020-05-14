@@ -172,31 +172,32 @@ module.exports = {
 		return file
 	},
 	async getLocationFromFile(webId, locationFile){
-		if (locationFile === null){
+		if (!locationFile){
 			return null
-		}
-		else {
+		} else {
+			webId = webId.toString()
 			//parse location file
-			let locationContent = await fc.readFile(locationFile)
-			const parser = new N3.Parser({baseIRI: webId});
-			const quads = parser.parse(locationContent)
-			//maak store en steek de geparste quads er in
-			const store = new N3.Store()
-			store.addQuads(quads)
-			//getquads(subj, pred, object, graph)
-			let userQuad = store.getQuads(webId, basedNear)
-			if (userQuad.length > 0){
-				let longQuad = store.getQuads(userQuad.object, geo + "long")
-				let latQuad = store.getQuads(userQuad.object, geo+ "lat")
+			return fc.readFile(locationFile)
+				.then( locationContent => {
+					const parser = new N3.Parser({baseIRI: webId});
+					const quads = parser.parse(locationContent)
+					//maak store en steek de geparste quads er in
+					const store = new N3.Store()
+					store.addQuads(quads)
+					//getquads(subj, pred, object, graph)
+					let userQuad = store.getQuads(webId, basedNear)
+					if (userQuad.length > 0){
+						let longQuad = store.getQuads(userQuad.object, geo + "long")
+						let latQuad = store.getQuads(userQuad.object, geo+ "lat")
 
-				let long = parseFloat(longQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
-				let lat = parseFloat(latQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
-				//console.log("location of " + webId + " = " + long + ", " + lat)
-				return { lat: lat, long: long}
-			}
-			else {
-				return null
-			}
+						let long = parseFloat(longQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
+						let lat = parseFloat(latQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
+
+						return { lat: lat, long: long}
+					} else {
+						return null
+					}
+				})
 		}
 	}
 }
