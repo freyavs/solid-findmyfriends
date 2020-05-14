@@ -1,5 +1,5 @@
 /**
- * source: https://github.com/solid/solid-notifications, met kleine aanpassing op lijn 84
+ * source: https://github.com/solid/solid-notifications, with small changes see **changed**
  */
 
 
@@ -85,7 +85,7 @@ export function list(resourceUri, options) {
       return webClient.get(inboxUri, options)
     })
     .then(container => {
-    //return Object.keys(container.resources) van de github werkte niet, dus dit is aangepast
+    //return Object.keys(container.resources) **changed**
       return Object.keys(container.resource.resources)
     })
 }

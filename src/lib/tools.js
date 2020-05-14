@@ -13,6 +13,7 @@ const geo  = "http://www.w3.org/2003/01/geo/wgs84_pos#"
 
 const geoPoint = N3.DataFactory.namedNode(geo + "Point")
 const instance = N3.DataFactory.namedNode("http://www.w3.org/ns/solid/terms#instance")
+const basedNear = N3.DataFactory.namedNode(foaf + "based_near")
 
 module.exports = {
 	escape (iri) {
@@ -46,8 +47,6 @@ module.exports = {
 
 	async updateLocation(webId, locationFile, currentLocation) {
 		console.log("updating location file: " + locationFile)
-		//todo: weg
-		this.getLocationFromFile(webId, locationFile)
 		// Create the SPARQL UPDATE query
 		const query = `
 			DELETE DATA { 
@@ -173,15 +172,31 @@ module.exports = {
 		return file
 	},
 	async getLocationFromFile(webId, locationFile){
-		console.log("getting location from file")
-		//parse location file
-		let locationContent = await fc.readFile(locationFile)
-		const parser = new N3.Parser({baseIRI: webId});
-		const quads = parser.parse(locationContent)
-		//maak store en steek de geparste quads er in
-		const store = new N3.Store()
-		store.addQuads(quads)
+		if (locationFile === null){
+			return null
+		}
+		else {
+			//parse location file
+			let locationContent = await fc.readFile(locationFile)
+			const parser = new N3.Parser({baseIRI: webId});
+			const quads = parser.parse(locationContent)
+			//maak store en steek de geparste quads er in
+			const store = new N3.Store()
+			store.addQuads(quads)
+			//getquads(subj, pred, object, graph)
+			let userQuad = store.getQuads(webId, basedNear)
+			if (userQuad.length > 0){
+				let longQuad = store.getQuads(userQuad.object, geo + "long")
+				let latQuad = store.getQuads(userQuad.object, geo+ "lat")
 
-		console.log(quads)
+				let long = parseFloat(longQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
+				let lat = parseFloat(latQuad[0].object.id.split("^^")[0].toString().replace(/"/g,''))
+				//console.log("location of " + webId + " = " + long + ", " + lat)
+				return { lat: lat, long: long}
+			}
+			else {
+				return null
+			}
+		}
 	}
 }
