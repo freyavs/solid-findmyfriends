@@ -61,7 +61,7 @@ export function discoverInboxUri (uri, webClient, resource) {
  * @throws {Error} Rejects with an error if the resource has no inbox uri.
  * @return {Promise<Array<string>>}
  */
-export function list (resourceUri, options) {
+export function list(resourceUri, options) {
   let webClient = options.webClient
   if (!webClient) {
     return Promise.reject(new Error('Web client instance is required'))
@@ -75,9 +75,13 @@ export function list (resourceUri, options) {
       }
     })
     .then(inboxUri => {
+      const auth = require('solid-auth-client')
+      const FC	 = require('solid-file-client')
+      const fc	 = new FC( auth )
       let options = {
         headers: { 'Accept': DEFAULT_ACCEPT }
       }
+      fc.readFolder(inboxUri).then(folder => console.log(folder))
       return webClient.get(inboxUri, options)
     })
     .then(container => {
