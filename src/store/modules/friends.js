@@ -20,9 +20,7 @@ export const mutations = {
 	},
 	UPDATE_FRIEND_SHARE_STATUS(state, update){
 		state.friends.forEach((friend, index) => {
-			console.log(index)
-			if (friend.webId.toString() === update.friendId) {
-				console.log("update")
+			if (friend.webId.toString() === update.webId.toString()) {
 				Vue.set(state.friends, index, {webId: friend.webId, sharing: update.sharing})
 			}
 		})
@@ -32,6 +30,9 @@ export const mutations = {
 export const actions = {
 	switchFriendsView({ commit }) {
 		commit("SWITCH_FRIENDS_VIEW")
+	},
+	updateFriend({ commit }, friend){
+		commit("UPDATE_FRIEND_SHARE_STATUS", friend)
 	},
 	async addFriend({ rootState, commit }, friendWebId){
 		if (tools.escape(friendWebId) === ""){
@@ -64,8 +65,8 @@ export const actions = {
 	},
 	async fetchFriendsPermissions({ commit, rootState }){
 		const friendsWithPermission = await permissions.getFriendsWithAcces(rootState.locationFile)
-		friendsWithPermission.forEach(friendId => {
-			commit('UPDATE_FRIEND_SHARE_STATUS', { friendId, sharing: true })
+		friendsWithPermission.forEach(webId => {
+			commit('UPDATE_FRIEND_SHARE_STATUS', { webId, sharing: true })
 		})
 	}
 }

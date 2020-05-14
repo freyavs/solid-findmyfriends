@@ -49,6 +49,7 @@ export default {
 				permissions.revokePermission(this.locationFile, this.friendId)
 			}
 			this.sharing = !this.sharing
+			this.$store.dispatch("updateFriend", {webId: this.friendId, sharing: this.sharing})
 		},
 		requestLocation(){
 			this.$store.dispatch('requestLocation', this.friendId)
@@ -56,12 +57,8 @@ export default {
 	},
 	watch: {
 		friends: function() {
-			console.log("watch")
 			this.friends.forEach(friend => {
 				if (friend.webId.toString() === this.friendId.toString()) {
-					console.log(friend.webId.toString())
-					console.log(friend)
-					console.log(friend.sharing)
 					this.sharing = friend.sharing
 				}
 			})
