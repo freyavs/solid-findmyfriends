@@ -14,6 +14,9 @@ const options = {
 
 const ParserJsonld = require('@rdfjs/parser-jsonld')
 const Readable = require('stream').Readable
+
+const actStreams = "https://www.w3.org/ns/activitystreams#"
+const summary = "FindMyFriendRequest"
  
 const parserJsonld = new ParserJsonld()
 
@@ -36,30 +39,33 @@ export const actions = {
             fc.readFolder(inboxUri).then(folder => {
                 for (let message of folder.files){
                     fc.readFile(message.url).then( m => {
-                        //console.log(m)
                         let input = new Readable({
                             read: () => {
                             input.push(m)
                             input.push(null)
                             }
                         })
-
                         let output = parserJsonld.import(input)
-
+                        let isInvite, hasSumm, requester
                         output.on('data', quad => {
-                            //TODO: beter
-                            if (quad.predicate.value.toString() === "https://www.w3.org/ns/activitystreams#actor"){
-                                let requester = quad.object.value.toString()
+                            //make sure message is a request of our app
+                            if (quad.object.value === actStreams + "Invite"){
+                                isInvite = true
+                            }
+                            if (quad.predicate.value === actStreams + "summary" && quad.object.value === summary){
+                                hasSumm = true
+                            }
+                            if (quad.predicate.value === actStreams + "actor"){
+                                requester = quad.object.value             
+                            }
+                            if (isInvite && hasSumm && requester){
                                 if ( requests.filter(req => req.requester === requester).length > 0 ){
                                     //delete any double requests, use delete in stead of deleteFile so it doesn't try to delete non existing .acl and .meta files
                                     fc.delete(message.url)
-                                    console.log("deleting duplicate message")
                                 }
                                 else {
                                     requests.push({ requester: requester, message: message.url})
-                                    console.log("adding to requests")
                                 }
-                               // console.log(quad)
                             }
                         })
                     })
@@ -72,8 +78,7 @@ export const actions = {
     requestLocation( { rootState} ,friendWebId){
           let payload = `{
             "@context": "https://www.w3.org/ns/activitystreams#",
-            "@id": "",
-            "summary": "FindMyFriendRequest",
+            "summary": "${summary}",
             "type": "Invite",
             "actor": "${rootState.webId}"
             }`

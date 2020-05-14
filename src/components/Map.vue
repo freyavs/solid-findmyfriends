@@ -47,8 +47,8 @@ export default {
 						this.currentLocation.coords.latitude,
 						this.currentLocation.coords.longitude
 					], { icon: smallIcon }).addTo(this.map)
-
-			}else{
+        this.map.flyTo(new L.LatLng(this.currentLocation.coords.latitude, this.currentLocation.coords.longitude));
+      }else{
 				this.map.removeLayer(this.marker)
 			}
 		}

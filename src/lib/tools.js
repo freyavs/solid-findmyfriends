@@ -26,10 +26,12 @@ module.exports = {
 		//when user stops location sharing, remove location from location file
 		const query = `
 		DELETE DATA { 
+			<${webId}> a <${foaf}Person>  .
 			<${webId}> <${foaf}based_near>  ?o . 
 			 ?o a <${geo}Point>; <${geo}lat> ?x;  <${geo}long> ?y;
 		} 
 		WHERE {  
+			<${webId}> a <${foaf}Person>  .
 			<${webId}> <${foaf}based_near>  ?o . 
 			?o a <${geo}Point>; <${geo}lat> ?x;  <${geo}long> ?y;
 		};
@@ -50,6 +52,7 @@ module.exports = {
 		// Create the SPARQL UPDATE query
 		const query = `
 			DELETE DATA { 
+				<${webId}> a <${foaf}Person>  .
 				<${webId}> <${foaf}based_near>  ?o . 
 				 ?o a <${geo}Point>; <${geo}lat> ?x;  <${geo}long> ?y;
 			} 
@@ -62,6 +65,7 @@ module.exports = {
 						 ].
 			}
 			WHERE {  
+				<${webId}> a <${foaf}Person>  .
 				<${webId}> <${foaf}based_near>  ?o . 
 				?o a <${geo}Point>; <${geo}lat> ?x;  <${geo}long> ?y;
 			};
