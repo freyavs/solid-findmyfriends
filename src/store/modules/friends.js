@@ -26,6 +26,10 @@ export const mutations = {
 			}
 		})
 	},
+	LOGOUT(state) {
+		state.friends = []
+		state.friendsView = true
+	}
 }
 
 export const actions = {
@@ -61,8 +65,9 @@ export const actions = {
 	async fetchFriends({ commit, rootState }){
 		let person = data[rootState.webId]
 		for await (const webid of person.friends) {
-			let file = await tools.getLocationFile(webid.toString())
-			commit("ADD_FRIEND", {id: webid, file: file})
+			tools.getLocationFile(webid.toString()).then( file => {
+				commit("ADD_FRIEND", {id: webid, file: file})
+			}) 
 		}
 	},
 	async fetchFriendsPermissions({ commit, rootState }){
@@ -70,5 +75,8 @@ export const actions = {
 		friendsWithPermission.forEach(webId => {
 			commit('UPDATE_FRIEND_SHARE_STATUS', { webId, sharing: true })
 		})
+	},
+	logout({ commit }){
+		commit('LOGOUT')
 	}
 }

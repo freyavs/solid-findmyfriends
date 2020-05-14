@@ -1,6 +1,6 @@
 <template>
-	<div class="anim">
-		<div class="addfriendcontainer">
+	<div class="anim" >
+		<div class="addfriendcontainer" v-if="loggedIn">
 			<input v-model="friendurl" placeholder="Add a friend with solidurl..."/>
 			<button v-on:click="addFriend">Add</button>
 		</div>
@@ -19,6 +19,7 @@ export default {
 		FriendCard
 	},
 	computed: mapState({
+		loggedIn: state => state.loggedIn,
 		friends: state => state.friends.friends,
 		friendsView: state => state.friends.friendsView
 	}),
