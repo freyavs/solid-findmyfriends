@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import tools from '../../lib/tools'
-
+import permissions from '../../lib/solid-permissions'
 const auth = require('solid-auth-client')
 const {default: data} = require('@solid/query-ldflex')
 
@@ -19,11 +19,21 @@ export const mutations = {
 	SWITCH_FRIENDS_VIEW(state) {
 		state.friendsView = !state.friendsView
 	},
+	UPDATE_FRIEND_SHARE_STATUS(state, update){
+		state.friends.forEach((friend, index) => {
+			if (friend.webId.toString() === update.webId.toString()) {
+				Vue.set(state.friends, index, {webId: friend.webId, sharing: update.sharing})
+			}
+		})
+	},
 }
 
 export const actions = {
 	switchFriendsView({ commit }) {
 		commit("SWITCH_FRIENDS_VIEW")
+	},
+	updateFriend({ commit }, friend){
+		commit("UPDATE_FRIEND_SHARE_STATUS", friend)
 	},
 	async addFriend({ rootState, commit }, friendWebId){
 		if (tools.escape(friendWebId) === ""){
@@ -55,7 +65,10 @@ export const actions = {
 			commit("ADD_FRIEND", {id: webid, file: file})
 		}
 	},
-	async fetchFriendsPermissions(){
-		console.log('fetch perm')
+	async fetchFriendsPermissions({ commit, rootState }){
+		const friendsWithPermission = await permissions.getFriendsWithAcces(rootState.locationFile)
+		friendsWithPermission.forEach(webId => {
+			commit('UPDATE_FRIEND_SHARE_STATUS', { webId, sharing: true })
+		})
 	}
 }

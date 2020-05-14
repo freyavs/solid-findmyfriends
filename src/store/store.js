@@ -29,17 +29,18 @@ export default new Vuex.Store({
 	},
 	actions: {
 		login({ commit, dispatch }, webId) {
-			commit("LOGIN", webId)
-			dispatch("fetchFriends")
-			dispatch("fetchRequests")
+			commit('LOGIN', webId)
+			dispatch('fetchFriends')
+      dispatch('setLocationFile')
+			dispatch('fetchRequests')
 		},
 		logout({ commit }) {
-			commit("LOGOUT");
+			commit('LOGOUT');
 		},
 		async setLocationFile({state, commit, dispatch}) {
 			const locationFile = await tools.setLocationFile(state.webId)
-			commit("SET_LOCATION_FILE", locationFile)
-			dispatch("fetchFriendsPermissions")
+			commit('SET_LOCATION_FILE', locationFile)
+			dispatch('fetchFriendsPermissions')
 		}
 	},
 	modules: {

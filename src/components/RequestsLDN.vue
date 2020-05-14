@@ -5,7 +5,7 @@
 			<h3>Share your location with: </h3>
 		</div>
 		<div class="scrollable">
-            <RequestCard v-for="req in requests" :key="req.message" :request="req"/> 
+			<RequestCard v-for="req in requests" :key="req.message" :request="req"/> 
 		</div>
 	</div>
 </template>
