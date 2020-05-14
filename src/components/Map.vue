@@ -35,7 +35,10 @@ export default {
           shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
           shadowSize: [41, 41]
         });
-
+				//remove eerst de marker en zet dan een nieuwe
+				if (this.marker){
+					this.map.removeLayer(this.marker)
+				}
         this.marker = L.marker([
             this.currentLocation.coords.latitude,
             this.currentLocation.coords.longitude
