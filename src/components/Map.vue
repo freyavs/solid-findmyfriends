@@ -57,9 +57,10 @@ export default {
 		async updateFriendLocations(){
 			let newMarkers = []
 			for (let friend of this.friends){
-				console.log("after name: " + name.toString())
+				console.log("after name: " + friend.webId)
 				Promise.resolve(tools.getLocationFromFile(friend.webId, friend.locationFile)
 					.then( location => {
+						console.log(friend.locationFile, location)
 						if (location){
 							let person = data[friend.webId]
 							person.name.then(name => {
