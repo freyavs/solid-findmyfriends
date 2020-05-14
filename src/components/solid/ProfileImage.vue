@@ -13,8 +13,8 @@ export default {
     props:['src'],
     asyncComputed: {
         async image(){
-            let person = data[this.src]
-            return await person.foaf_img
+					let person = data[this.src]
+					return await person.foaf_img
         }
     }  
 }

@@ -6,7 +6,7 @@
 			<div class="anim" v-if="friendsView" key="1">
         <FriendList/>
 			</div>
-      <div v-else key="2">
+      <div class="anim" v-else key="2">
         <RequestsLDN/>
 			</div>
 		</transition>

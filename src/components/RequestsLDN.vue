@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="anim">
 		<div class="refreshcontainer">
 			<button v-on:click="refresh" >refresh</button>
 			<h3>Share your location with: </h3>
