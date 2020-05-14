@@ -12,8 +12,9 @@ export const state = {
 }
 
 export const mutations = {
-	ADD_FRIEND(state, friendWebId) {
-		Vue.set(state.friends, state.friends.length, {webId: friendWebId, sharing: false})
+	ADD_FRIEND(state, friend) {
+		//save id and location file of friend (if they have one)
+		Vue.set(state.friends, state.friends.length, {webId: friend.id, sharing: false, locationFile: friend.file})
 	},
 	SWITCH_FRIENDS_VIEW(state) {
 		state.friendsView = !state.friendsView
@@ -50,7 +51,8 @@ export const actions = {
 	async fetchFriends({ commit, rootState }){
 		let person = data[rootState.webId]
 		for await (const webid of person.friends) {
-			commit("ADD_FRIEND", webid)
+			let file = await tools.getLocationFile(webid.toString())
+			commit("ADD_FRIEND", {id: webid, file: file})
 		}
 	},
 	async fetchFriendsPermissions(){

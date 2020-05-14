@@ -1,5 +1,5 @@
 /**
- * source: https://github.com/solid/solid-notifications, met kleine aanpassing op lijn 84
+ * source: https://github.com/solid/solid-notifications, with small changes see **changed**
  */
 
 
@@ -61,7 +61,7 @@ export function discoverInboxUri (uri, webClient, resource) {
  * @throws {Error} Rejects with an error if the resource has no inbox uri.
  * @return {Promise<Array<string>>}
  */
-export function list (resourceUri, options) {
+export function list(resourceUri, options) {
   let webClient = options.webClient
   if (!webClient) {
     return Promise.reject(new Error('Web client instance is required'))
@@ -81,7 +81,7 @@ export function list (resourceUri, options) {
       return webClient.get(inboxUri, options)
     })
     .then(container => {
-    //return Object.keys(container.resources) van de github werkte niet, dus dit is aangepast
+    //return Object.keys(container.resources) **changed**
       return Object.keys(container.resource.resources)
     })
 }

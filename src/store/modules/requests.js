@@ -28,44 +28,56 @@ export const mutations = {
 }
 
 export const actions = {
-    fetchRequests({commit, rootState}){
+    async fetchRequests({commit, rootState}){
         let requests = []
-        sn.list(rootState.webId, options).then(contains => {
-            for (let message of contains){
-                fc.readFile(message).then( m => {
-                    console.log(m)
-                    let input = new Readable({
-                        read: () => {
-                          input.push(m)
-                          input.push(null)
-                        }
-                      })
 
-                    const output = parserJsonld.import(input)
+        //cant use sn.list because it is giving inconsistent results
+        sn.discoverInboxUri(rootState.webId, webClient).then(inboxUri => {
+            fc.readFolder(inboxUri).then(folder => {
+                for (let message of folder.files){
+                    fc.readFile(message.url).then( m => {
+                        //console.log(m)
+                        let input = new Readable({
+                            read: () => {
+                            input.push(m)
+                            input.push(null)
+                            }
+                        })
 
-                    output.on('data', quad => {
-                        let requester = quad.subject.value.toString()
-                        if ( requests.filter(req => req.requester == requester).length > 0 ){
-                            //delete any double requests, use delete in stead of deleteFile so it doesn't try to delete non existing .acl and .meta files
-                            fc.delete(message)
-                        }
-                        else {
-                            requests.push({ requester: requester, message: message})
-                        }
-                        //console.log(`${quad.subject.value} - ${quad.predicate.value} - ${quad.object.value}`)
+                        let output = parserJsonld.import(input)
+
+                        output.on('data', quad => {
+                            //TODO: beter
+                            if (quad.predicate.value.toString() === "https://www.w3.org/ns/activitystreams#actor"){
+                                let requester = quad.object.value.toString()
+                                if ( requests.filter(req => req.requester === requester).length > 0 ){
+                                    //delete any double requests, use delete in stead of deleteFile so it doesn't try to delete non existing .acl and .meta files
+                                    fc.delete(message.url)
+                                    console.log("deleting duplicate message")
+                                }
+                                else {
+                                    requests.push({ requester: requester, message: message.url})
+                                    console.log("adding to requests")
+                                }
+                               // console.log(quad)
+                            }
+                        })
                     })
-                })
 
-            }
+                }
+            })
         })
         commit('SET_REQUESTS', requests)
     },
     requestLocation( { rootState} ,friendWebId){
           let payload = `{
-            "@context": "https://www.w3.org/ns/activitystreams",
-            "@id": "${rootState.webId}",
-            "type": "FindMyFriendsRequest",
-            "from": "${rootState.webId}" }`
+            "@context": "https://www.w3.org/ns/activitystreams#",
+            "@id": "",
+            "summary": "FindMyFriendRequest",
+            "type": "Invite",
+            "actor": "${rootState.webId}"
+            }`
+
           sn.send(friendWebId.toString(), payload, options) 
     },
     handleRequest({ commit, state, rootState }, request){
