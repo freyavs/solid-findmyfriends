@@ -75,13 +75,9 @@ export function list(resourceUri, options) {
       }
     })
     .then(inboxUri => {
-      const auth = require('solid-auth-client')
-      const FC	 = require('solid-file-client')
-      const fc	 = new FC( auth )
       let options = {
         headers: { 'Accept': DEFAULT_ACCEPT }
       }
-      fc.readFolder(inboxUri).then(folder => console.log(folder))
       return webClient.get(inboxUri, options)
     })
     .then(container => {
