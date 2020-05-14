@@ -72,7 +72,8 @@ export default {
 							})
 						}
 					}))
-			}
+      }
+      //w
 			this.addFriendMarkers(newMarkers)
 		},
 		addFriendMarkers(newMarkers) {
