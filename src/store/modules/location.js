@@ -28,7 +28,7 @@ export const actions = {
 		console.log("Note: if location tracking is not turned off before leaving site, your last updated location will still be visible.")
 		commit("LOCATION_ON")
 		dispatch("getGeoLocation") 
-		//set location every 5 seconds
+		//set location every 15 seconds
 		commit("SET_TIMER", setInterval(() => { dispatch("getGeoLocation") } , 15000))
 	},
 	locationSharingOff({rootState, commit}) {
