@@ -8,22 +8,17 @@
 <script>
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { Icon }  from 'leaflet'
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+	iconUrl: require('leaflet/dist/images/marker-icon.png'),
+	shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 import { mapState } from "vuex";
 import tools from '@/lib/tools'
 
 const {default: data} = require('@solid/query-ldflex')
-
-//workaround leafletmarker not working
-let smallIcon = new L.Icon({
-	//iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png",
-	iconUrl: "https://ruben.verborgh.org/images/ruben.jpg",
-	//iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon-2x.png",
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
-	popupAnchor: [1, -34],
-	shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-	shadowSize: [41, 41]
-});
 
 export default {
 	computed: mapState({
@@ -52,12 +47,12 @@ export default {
 				this.marker = L.marker([
 						this.currentLocation.coords.latitude,
 						this.currentLocation.coords.longitude
-					], { icon: smallIcon }).bindTooltip(this.name.toString(), 
+					]).bindTooltip("<div class='tooltip'><h3>Me</h3></div>",
 							{
 								permanent: true, 
 								direction: 'right'
 							}).addTo(this.map)	
-							this.marker.classList.add("selectedMarker")		
+							
       }else{
 				this.map.removeLayer(this.marker)
 				this.marker = null
@@ -69,12 +64,15 @@ export default {
 			let newMarkers = []
 			for (let friend of this.friends){
 				let person = data[friend.webId]
-				const name = await person.name
+				let picture = await data[friend.img]
+				let name = await person.name
+
 				let marker = await Promise.resolve(tools.getLocationFromFile(friend.webId, friend.locationFile)
 					.then( location => {
 						if (location !== null){
 							let marker = {
 								name: name,
+								picture: picture,
 								latitude: location.lat,
 								longitude: location.long
 							}
@@ -94,10 +92,14 @@ export default {
 			})
 			this.friendMarkers = []
 			newMarkers.forEach(marker => {
+				let img = " "
+				if (marker.picture.toString() !== "undefined"){
+					img = "<img src=" + marker.picture.toString() +" class='img'></img>"
+				}
 				let newMarker = L.marker([
 						marker.latitude,
 						marker.longitude
-					], { icon: smallIcon }).bindTooltip(marker.name.toString(), 
+					]).bindTooltip("<div class='tooltip'> " + img + "<h4>" + marker.name.toString() + "</h4></div>", 
 							{
 								permanent: true, 
 								direction: 'right'
@@ -129,24 +131,15 @@ export default {
 	height: 100%;
 }
 
-.leaflet-div-icon2
+.img
 {
-  background:red;
-  border:5px solid rgba(255,255,255,0.5);
-  color:blue;
-  font-weight:bold;
-  text-align:center;
   border-radius:50%;
-  line-height:30px;
+  width: 50px;
+  height: 50px;
 }
 
-.leaflet-marker-icon.selectedMarker{
-   background:red;
-  border:5px solid rgba(255,255,255,0.5);
-  color:blue;
-  font-weight:bold;
-  text-align:center;
-  border-radius:50%;
-  line-height:30px;
+.tooltip{
+	background-color: rgba(255, 255, 255, 0.9);
 }
+
 </style>
