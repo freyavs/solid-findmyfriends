@@ -68,10 +68,8 @@ export default {
 			for (let friend of this.friends){
 				let person = data[friend.webId]
 				const name = await person.name
-				console.log(friend.webId + ": " + name + "'s location file is " + friend.locationFile )
 				let marker = await Promise.resolve(tools.getLocationFromFile(friend.webId, friend.locationFile)
 					.then( location => {
-						console.log(name + "'s location file: " + friend.locationFile + " shows " + location.lat + "," + location.long)
 						if (location !== null){
 							let marker = {
 								name: name,
@@ -83,7 +81,6 @@ export default {
 					})
 					.catch(error => error))
 				if(marker && marker.longitude){
-					console.log(marker)
 					newMarkers.push(marker)
 				}
 			}
