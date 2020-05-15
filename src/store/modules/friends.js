@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import tools from '../../lib/tools'
+import tools from '../../lib/tools' 
 import permissions from '../../lib/solid-permissions'
 const auth = require('solid-auth-client')
 const {default: data} = require('@solid/query-ldflex')
@@ -62,13 +62,13 @@ export const actions = {
 		}
 		return response.status === 200
 	},
-	async fetchFriends({ commit, rootState }){
+	async fetchFriends({ commit, rootState, dispatch }){
 		let person = data[rootState.webId]
 		for await (const webid of person.friends) {
-			tools.getLocationFile(webid.toString()).then( file => {
-				commit("ADD_FRIEND", {id: webid, file: file})
-			}) 
+			const tools = await tools.getLocationFile(webid.toString())
+			commit("ADD_FRIEND", {id: webid, file: file})
 		}
+		dispatch('setLocationFile')
 	},
 	async fetchFriendsPermissions({ commit, rootState }){
 		const friendsWithPermission = await permissions.getFriendsWithAcces(rootState.locationFile)

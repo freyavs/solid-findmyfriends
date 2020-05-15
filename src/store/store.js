@@ -34,14 +34,11 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
-		async login({ commit, dispatch }, webId) {
+		login({ commit, dispatch }, webId) {
 			commit('LOGIN', webId)
+			dispatch('getName', webId)
 			dispatch('fetchFriends')
-            dispatch('setLocationFile')
 			dispatch('fetchRequests')
-			let person = data[webId.toString()]
-			const name = await person.name
-			commit('SET_NAME', name)
 		},
 		logout({ commit }) {
 			commit('LOGOUT');
@@ -50,6 +47,11 @@ export default new Vuex.Store({
 			const locationFile = await tools.setLocationFile(state.webId)
 			commit('SET_LOCATION_FILE', locationFile)
 			dispatch('fetchFriendsPermissions')
+		},
+		async getName({ commit, state }){
+			let person = data[state.webId.toString()]
+			const name = await person.name
+			commit('SET_NAME', name)
 		}
 	},
 	modules: {
