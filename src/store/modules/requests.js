@@ -48,7 +48,6 @@ export const actions = {
                         let output = parserJsonld.import(input)
                         let isInvite, hasSumm, requester
                         output.on('data', quad => {
-                            console.log(quad)
                             //make sure message is a request of our app
                             if (quad.object.value === actStreams + "Invite"){
                                 isInvite = true

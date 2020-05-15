@@ -47,6 +47,7 @@ export default {
 				this.marker = L.marker([
 						this.currentLocation.coords.latitude,
 						this.currentLocation.coords.longitude
+				//geen foto nodig bij "me" vinden we, wel bij vrienden
 					]).bindTooltip("<div class='tooltip'><h3>Me</h3></div>",
 							{
 								permanent: true, 
@@ -64,7 +65,7 @@ export default {
 			let newMarkers = []
 			for (let friend of this.friends){
 				let person = data[friend.webId]
-				let picture = await data[friend.img]
+				let picture = await person.foaf_img
 				let name = await person.name
 
 				let marker = await Promise.resolve(tools.getLocationFromFile(friend.webId, friend.locationFile)
@@ -93,7 +94,7 @@ export default {
 			this.friendMarkers = []
 			newMarkers.forEach(marker => {
 				let img = " "
-				if (marker.picture.toString() !== "undefined"){
+				if (marker.picture !== undefined){
 					img = "<img src=" + marker.picture.toString() +" class='img'></img>"
 				}
 				let newMarker = L.marker([
