@@ -16,7 +16,7 @@ const ParserJsonld = require('@rdfjs/parser-jsonld')
 const Readable = require('stream').Readable
 
 const actStreams = "https://www.w3.org/ns/activitystreams#"
-const summary = "FindMyFriendRequest"
+const summary = "FindMyFriendRequestShareLocation"
  
 const parserJsonld = new ParserJsonld()
 
