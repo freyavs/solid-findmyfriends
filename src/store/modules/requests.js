@@ -1,4 +1,3 @@
-
 const rdf = require('rdflib')
 const sn = require('@/lib/solid-notifs.js')
 const perm = require('@/lib/solid-permissions.js')
