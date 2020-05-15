@@ -65,6 +65,9 @@ export const actions = {
 		
 		if (response.status === 200) {
 			commit("ADD_FRIEND", friendWebId)
+			tools.getLocationFile(friendWebId.toString()).then(file => {
+				commit("UPDATE_FRIEND_LOCATIONFILE", {webId: friendWebId, locationFile: file})
+			})
 		}
 		return response.status === 200
 	},
