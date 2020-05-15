@@ -65,8 +65,8 @@ export const actions = {
 	async fetchFriends({ commit, rootState, dispatch }){
 		let person = data[rootState.webId]
 		for await (const webid of person.friends) {
-			const tools = await tools.getLocationFile(webid.toString())
-			commit("ADD_FRIEND", {id: webid, file: file})
+			const locationFile = await tools.getLocationFile(webid.toString())
+			commit("ADD_FRIEND", {id: webid, file: locationFile})
 		}
 		dispatch('setLocationFile')
 	},
