@@ -12,9 +12,8 @@ export const state = {
 }
 
 export const mutations = {
-	ADD_FRIEND(state, friend) {
-		//save id and location file of friend (if they have one)
-		Vue.set(state.friends, state.friends.length, {webId: friend.id, sharing: false, locationFile: friend.file})
+	ADD_FRIEND(state, webId) {
+		Vue.set(state.friends, state.friends.length, {webId, sharing: false, locationFile: null})
 	},
 	SWITCH_FRIENDS_VIEW(state) {
 		state.friendsView = !state.friendsView
@@ -22,7 +21,14 @@ export const mutations = {
 	UPDATE_FRIEND_SHARE_STATUS(state, update){
 		state.friends.forEach((friend, index) => {
 			if (friend.webId.toString() === update.webId.toString()) {
-				Vue.set(state.friends, index, {webId: friend.webId, sharing: update.sharing})
+				Vue.set(state.friends, index, {webId: friend.webId, sharing: update.sharing, locationFile: friend.locationFile})
+			}
+		})
+	},
+	UPDATE_FRIEND_LOCATIONFILE(state, update){
+		state.friends.forEach((friend, index) => {
+			if (friend.webId.toString() === update.webId.toString()) {
+				Vue.set(state.friends, index, {webId: friend.webId, sharing: friend.sharing, locationFile: update.locationFile})
 			}
 		})
 	},
@@ -59,16 +65,26 @@ export const actions = {
 		
 		if (response.status === 200) {
 			commit("ADD_FRIEND", friendWebId)
+			tools.getLocationFile(friendWebId.toString()).then(file => {
+				commit("UPDATE_FRIEND_LOCATIONFILE", {webId: friendWebId, locationFile: file})
+			})
 		}
 		return response.status === 200
 	},
 	async fetchFriends({ commit, rootState, dispatch }){
 		let person = data[rootState.webId]
-		for await (const webid of person.friends) {
-			const locationFile = await tools.getLocationFile(webid.toString())
-			commit("ADD_FRIEND", {id: webid, file: locationFile})
+		for await (const webId of person.friends) {
+			commit("ADD_FRIEND", webId)
 		}
+		dispatch('fetchFriendsLocationFiles')
 		dispatch('setLocationFile')
+	},
+	async fetchFriendsLocationFiles({ commit, state }){
+		state.friends.forEach(friend => {
+			tools.getLocationFile(friend.webId.toString()).then(file => {
+				commit("UPDATE_FRIEND_LOCATIONFILE", {webId: friend.webId, locationFile: file})
+			})
+		})
 	},
 	async fetchFriendsPermissions({ commit, rootState }){
 		const friendsWithPermission = await permissions.getFriendsWithAcces(rootState.locationFile)

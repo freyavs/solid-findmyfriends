@@ -15,8 +15,9 @@ const {default: data} = require('@solid/query-ldflex')
 
 //workaround leafletmarker not working
 let smallIcon = new L.Icon({
-	iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png",
-	iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon-2x.png",
+	//iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png",
+	iconUrl: "https://ruben.verborgh.org/images/ruben.jpg",
+	//iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon-2x.png",
 	iconSize: [25, 41],
 	iconAnchor: [12, 41],
 	popupAnchor: [1, -34],
@@ -55,7 +56,8 @@ export default {
 							{
 								permanent: true, 
 								direction: 'right'
-							}).addTo(this.map)			
+							}).addTo(this.map)	
+							this.marker.classList.add("selectedMarker")		
       }else{
 				this.map.removeLayer(this.marker)
 				this.marker = null
@@ -68,10 +70,8 @@ export default {
 			for (let friend of this.friends){
 				let person = data[friend.webId]
 				const name = await person.name
-				console.log(friend.webId + ": " + name + "'s location file is " + friend.locationFile )
 				let marker = await Promise.resolve(tools.getLocationFromFile(friend.webId, friend.locationFile)
 					.then( location => {
-						console.log(name + "'s location file: " + friend.locationFile + " shows " + location.lat + "," + location.long)
 						if (location !== null){
 							let marker = {
 								name: name,
@@ -83,7 +83,6 @@ export default {
 					})
 					.catch(error => error))
 				if(marker && marker.longitude){
-					console.log(marker)
 					newMarkers.push(marker)
 				}
 			}
@@ -128,5 +127,26 @@ export default {
 #mapContainer {
 	width: 100%;
 	height: 100%;
+}
+
+.leaflet-div-icon2
+{
+  background:red;
+  border:5px solid rgba(255,255,255,0.5);
+  color:blue;
+  font-weight:bold;
+  text-align:center;
+  border-radius:50%;
+  line-height:30px;
+}
+
+.leaflet-marker-icon.selectedMarker{
+   background:red;
+  border:5px solid rgba(255,255,255,0.5);
+  color:blue;
+  font-weight:bold;
+  text-align:center;
+  border-radius:50%;
+  line-height:30px;
 }
 </style>
