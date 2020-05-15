@@ -84,7 +84,7 @@ export const actions = {
             }`
 
           sn.send(friendWebId.toString(), payload, options) 
-					alert("request sended")
+					alert("request sent")
     },
     handleRequest({ commit, state, rootState }, request){
         fc.delete(request.message)

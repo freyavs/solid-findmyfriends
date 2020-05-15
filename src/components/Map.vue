@@ -82,10 +82,11 @@ export default {
 						}
 					})
 					.catch(error => error))
-				if(marker){
+				if(marker && marker.longitude){
+					console.log(marker)
 					newMarkers.push(marker)
 				}
-      }
+			}
 			this.addFriendMarkers(newMarkers)
 		},
 		addFriendMarkers(newMarkers) {
