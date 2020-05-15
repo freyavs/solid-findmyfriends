@@ -4,7 +4,7 @@
 				<ProfileImage :src="webId"/>
 			</div>
 			<div class="container" v-if="loggedIn">
-				<Name :src="webId"/>
+        <h3>{{ name }}</h3>
 				<ToggleButton/>
 				<button v-on:click="changeView">{{ viewSwitchButtonText }}</button>
 			</div>
@@ -14,13 +14,11 @@
 <script>
 import { mapState } from "vuex"
 import ToggleButton from '@/components/ToggleButton.vue'
-import Name from '@/components/solid/Name.vue'
 import ProfileImage from '@/components/solid/ProfileImage.vue'
 
 export default {
   components:{
     ToggleButton,
-    Name,
     ProfileImage
   },
 	computed: {
@@ -33,6 +31,7 @@ export default {
 		},
 		...mapState({
 			webId: state => state.webId,
+			name: state => state.name,
 			loggedIn: state => state.loggedIn,
 			friendsView: state => state.friends.friendsView})
 	},
