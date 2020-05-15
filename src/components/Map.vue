@@ -62,6 +62,7 @@ export default {
 	},
 	methods: {
 		async updateFriendLocations(){
+			console.log("Note: updating friends location, errors will appear if you aren't allowed to see someone's location.")
 			let newMarkers = []
 			for (let friend of this.friends){
 				let person = data[friend.webId]
