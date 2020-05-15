@@ -16,7 +16,7 @@ const ParserJsonld = require('@rdfjs/parser-jsonld')
 const Readable = require('stream').Readable
 
 const actStreams = "https://www.w3.org/ns/activitystreams#"
-const summary = "FindMyFriendRequestShareLocation"
+const summary = "FindMyFriendRequest"
  
 const parserJsonld = new ParserJsonld()
 
@@ -48,6 +48,7 @@ export const actions = {
                         let output = parserJsonld.import(input)
                         let isInvite, hasSumm, requester
                         output.on('data', quad => {
+                            console.log(quad)
                             //make sure message is a request of our app
                             if (quad.object.value === actStreams + "Invite"){
                                 isInvite = true
