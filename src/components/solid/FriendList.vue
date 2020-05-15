@@ -5,7 +5,7 @@
 			<button v-on:click="addFriend">Add</button>
 		</div>
 		<div class="scrollable">
-			<FriendCard v-for="friend in friends" :key="friend.webId.toString()" :friendId="friend.webId"/> 
+			<FriendCard v-for="friend in friends" :key="friend.webId.toString()" :friendId="friend.webId" :isSharing="friend.sharing"/> 
 		</div>
 	</div>
 </template>
@@ -32,7 +32,6 @@ export default {
 		async addFriend(){
 			let success = await this.$store.dispatch('addFriend', this.friendurl)
 			if (success){
-				console.log("Friend add succes")
 				this.friendurl = null 
 			}
 			else {

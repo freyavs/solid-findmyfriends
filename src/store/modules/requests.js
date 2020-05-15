@@ -86,11 +86,12 @@ export const actions = {
           sn.send(friendWebId.toString(), payload, options) 
 					alert("request sent")
     },
-    handleRequest({ commit, state, rootState }, request){
+    handleRequest({ commit, state, rootState, dispatch }, request){
         fc.delete(request.message)
         let requests = state.requests.filter(req => req.requester !== request.requester)
         if (request.accepted){
             perm.givePermission(rootState.locationFile, request.requester)
+						dispatch("updateFriend", {webId: request.requester, sharing: true})
         }
         commit('SET_REQUESTS', requests)
     }

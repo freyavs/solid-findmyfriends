@@ -16,14 +16,14 @@ import { mapState } from 'vuex'
 
 
 export default {
-	props: ['friendId'],
+	props: ['friendId', 'isSharing'],
 	components: {
 		Name,
 		ProfileImage
 	},
 	data() {
 		return {
-			sharing: false
+			sharing:  this.isSharing
 		}
 	},
 	computed: {
