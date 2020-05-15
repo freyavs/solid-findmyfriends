@@ -110,7 +110,7 @@ module.exports = {
 		//verkrijg publicTypeIndex			
 		let person = data[webId]
 		let registry = await person['http://www.w3.org/ns/solid/terms#publicTypeIndex']
-		//stel baseIRI in zodat juist absolute pad van location.ttl gegeven wordt
+		//stel baseIRI in zodat juist absolute pad van locationfmf.ttl gegeven wordt
 		const parser = new N3.Parser({baseIRI: webId});
 		
 		//parse registry 
@@ -139,7 +139,7 @@ module.exports = {
 		const podRoot = webId.replace(/\/profile.*/, '/')
 		
 		//maak locationfile aan
-		const make = fc.createFile(podRoot + "public/location.ttl", "", "text/turtle")
+		const make = fc.createFile(podRoot + "public/locationfmf.ttl", "", "text/turtle")
 			.then(() => {
 				//update de publicTypeIndex met de nieuwe file
 				const query = `
@@ -148,7 +148,7 @@ module.exports = {
 					@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 					<findmyfriendslocation> a solid:TypeRegistration;
 						solid:forClass wgs:Point;
-						solid:instance </public/location.ttl>.	
+						solid:instance </public/locationfmf.ttl>.	
 				}
 				`
 				return Promise.resolve(
@@ -159,8 +159,8 @@ module.exports = {
 						credentials: 'include',
 					})
 						.then(() => {
-							permissions.revokePublicAgentPermission(podRoot + "public/location.ttl")
-							return podRoot + "public/location.ttl"
+							permissions.revokePublicAgentPermission(podRoot + "public/locationfmf.ttl")
+							return podRoot + "public/locationfmf.ttl"
 						})
 						.catch(error => {
 						console.log("Failed to update publicTypeIndex")
