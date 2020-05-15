@@ -48,7 +48,6 @@ module.exports = {
 	},
 
 	async updateLocation(webId, locationFile, currentLocation) {
-		console.log("updating location file: " + locationFile)
 		// Create the SPARQL UPDATE query
 		const query = `
 			DELETE DATA { 

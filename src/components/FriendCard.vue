@@ -23,7 +23,7 @@ export default {
 	},
 	data() {
 		return {
-			sharing:  this.isSharing
+			sharing: this.isSharing
 		}
 	},
 	computed: {
@@ -42,10 +42,8 @@ export default {
 	methods: {
 		switchPermissionStatus(){
 			if (!this.sharing){
-				console.log("give perimission to: " + this.friendId)
 				permissions.givePermission(this.locationFile, this.friendId)
 			} else {
-				console.log("revoke perimission to: " + this.friendId)
 				permissions.revokePermission(this.locationFile, this.friendId)
 			}
 			this.sharing = !this.sharing

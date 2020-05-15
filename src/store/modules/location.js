@@ -25,7 +25,9 @@ export const mutations = {
 
 export const actions = {
 	locationSharingOn({commit, dispatch}) {
+		console.log("=====================================================================")
 		console.log("Note: if location tracking is not turned off before leaving site, your last updated location will still be visible.")
+		console.log("=====================================================================")
 		commit("LOCATION_ON")
 		dispatch("getGeoLocation") 
 		//set location every 15 seconds
