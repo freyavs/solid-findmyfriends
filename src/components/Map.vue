@@ -28,39 +28,37 @@ export default {
 	computed: mapState({
 		currentLocation: state => state.location.currentLocation,
 		friends: state => state.friends.friends,
-		webId: state => state.webId
+		webId: state => state.webId,
+		name: state => state.name
 	}),
 	data() {
 		return {
 			map: null,
 			marker: null,
 			friendMarkers: [],
-			name: null
+			onMap: false,
 		};
 	},
 	watch: {
 		currentLocation: function() {
-			if (this.currentLocation != null) {
+			if (this.currentLocation !== null && this.name !== null) {
 				//remove eerst de marker en zet dan een nieuwe
 				if (this.marker){
 					this.map.removeLayer(this.marker)
 				}else{
 					this.map.flyTo(new L.LatLng(this.currentLocation.coords.latitude, this.currentLocation.coords.longitude))
 				}
-				if(this.name == null) {
-					this.getName()
-				}
 				this.marker = L.marker([
 						this.currentLocation.coords.latitude,
 						this.currentLocation.coords.longitude
-					], { icon: smallIcon }).addTo(this.map)
-				if(this.name != null){
-					this.marker
-						.bindPopup(this.name.toString())
-						.openPopup()
-				}
+					], { icon: smallIcon }).bindTooltip(this.name.toString(), 
+							{
+								permanent: true, 
+								direction: 'right'
+							}).addTo(this.map)			
       }else{
 				this.map.removeLayer(this.marker)
+				this.marker = null
 			}
 		}
 	},
@@ -90,22 +88,21 @@ export default {
 			this.addFriendMarkers(newMarkers)
 		},
 		addFriendMarkers(newMarkers) {
-			this.friendMarkers.forEach(marker => this.map.removeLayer(marker))
+			this.friendMarkers.forEach(marker => {
+				this.map.removeLayer(marker)
+			})
 			newMarkers.forEach(marker => {
-				this.friendMarkers.push(marker)
-				L.marker([
+				this.friendMarkers = []
+				let newMarker = L.marker([
 						marker.latitude,
 						marker.longitude
-					], { icon: smallIcon }).addTo(this.map)
-					.bindPopup(marker.name.toString())
-					.openPopup()
-
+					], { icon: smallIcon }).bindTooltip(marker.name.toString(), 
+							{
+								permanent: true, 
+								direction: 'right'
+							}).addTo(this.map)
+				this.friendMarkers.push(newMarker)
 			})
-		},
-		async getName(){
-			let person = data[this.webId.toString()]
-			const name = await person.name
-			this.name = name
 		}
 	},
 	mounted() {

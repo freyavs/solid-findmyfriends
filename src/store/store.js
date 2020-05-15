@@ -5,6 +5,8 @@ import * as friends from '@/store/modules/friends.js'
 import tools from '../lib/tools'
 import * as requests from '@/store/modules/requests.js'
 
+const {default: data} = require('@solid/query-ldflex')
+
 Vue.use(Vuex);
 
 
@@ -13,6 +15,7 @@ export default new Vuex.Store({
 		loggedIn: false,
 		webId: "",
 		locationFile: "",
+		name: "",
 	},
 	mutations: {
 		LOGIN(state, webId) {
@@ -26,13 +29,19 @@ export default new Vuex.Store({
 		SET_LOCATION_FILE(state, file){
 			state.locationFile = file;
 		},
+		SET_NAME(state, name){
+			state.name = name;
+		}
 	},
 	actions: {
-		login({ commit, dispatch }, webId) {
+		async login({ commit, dispatch }, webId) {
 			commit('LOGIN', webId)
 			dispatch('fetchFriends')
-      dispatch('setLocationFile')
+            dispatch('setLocationFile')
 			dispatch('fetchRequests')
+			let person = data[webId.toString()]
+			const name = await person.name
+			commit('SET_NAME', name)
 		},
 		logout({ commit }) {
 			commit('LOGOUT');
